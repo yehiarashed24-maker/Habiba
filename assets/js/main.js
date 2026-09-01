@@ -282,13 +282,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Header scroll
   const header = document.getElementById('siteHeader');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
+  if (header) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+  }
 
   // Mobile menu
   const mobileToggle = document.getElementById('mobileMenuToggle');
