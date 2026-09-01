@@ -255,10 +255,19 @@ function showToast(message) {
 
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `
-    <i class="fa-solid fa-circle-check" style="color: var(--color-brand-pink-light); font-size: 1.15rem;"></i>
-    <span>${message}</span>
-  `;
+  
+  // Create icon
+  const icon = document.createElement('i');
+  icon.className = 'fa-solid fa-circle-check';
+  icon.style.color = 'var(--color-brand-pink-light)';
+  icon.style.fontSize = '1.15rem';
+  
+  // Create message span safely (Anti-XSS)
+  const textSpan = document.createElement('span');
+  textSpan.textContent = message; // Safe from DOM XSS
+  
+  toast.appendChild(icon);
+  toast.appendChild(textSpan);
 
   container.appendChild(toast);
 
