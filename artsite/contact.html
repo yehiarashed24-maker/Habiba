@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self'; object-src 'none';">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Contact Us | Habiba Motif Art Gallery</title>
+  <link rel="icon" href="assets/images/logo.jpg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Minimalist Navigation Switcher with Language Toggle -->
+  <nav class="page-nav" aria-label="Page Navigation">
+    <a href="index.html"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a>
+    <a href="about.html"><i class="fa-regular fa-user"></i> <span data-i18n="nav_about">About</span></a>
+    <a href="gallery.html"><i class="fa-solid fa-palette"></i> <span data-i18n="nav_gallery">Gallery</span></a>
+    <a href="contact.html" class="active"><i class="fa-regular fa-envelope"></i> <span data-i18n="nav_contact">Contact</span></a>
+    <button class="lang-toggle-btn" id="langToggleBtn" aria-label="Change Language"><i class="fa-solid fa-globe"></i> عربي</button>
+  </nav>
+
+  <!-- Main Contact Canvas (Exact 2.svg with Habiba Motif Logo & Text) -->
+  <main class="contact-container">
+    <div class="contact-layout">
+      
+      <!-- Left: Logo + Top Brand + Headline -->
+      <div class="contact-left">
+        <header class="contact-brand">
+          <a href="index.html" style="display: flex; align-items: center; gap: 1rem;">
+            <img src="assets/images/logo.jpg" alt="Habiba Motif Logo" class="brand-logo-circle" style="width: 60px; height: 60px;">
+            <div class="contact-brand-title">
+              <span data-i18n="brand_title_1">HABIBA MOTIF</span>
+              <span data-i18n="brand_title_2">ART GALLERY</span>
+            </div>
+          </a>
+        </header>
+
+        <h1 class="contact-headline" data-i18n="contact_headline">
+          Create with Us
+        </h1>
+      </div>
+
+      <!-- Right: Contact Information -->
+      <div class="contact-right">
+        <div class="contact-field">
+          <span class="contact-field-title" data-i18n="contact_addr_title">MAILING ADDRESS</span>
+          <p class="contact-field-value" data-i18n="contact_addr_val">123 Anywhere St., Any City, Country 123456</p>
+        </div>
+
+        <div class="contact-field">
+          <span class="contact-field-title" data-i18n="contact_email_title">EMAIL ADDRESS</span>
+          <p class="contact-field-value">
+            <a href="mailto:hello@reallygreatsite.com">hello@reallygreatsite.com</a>
+          </p>
+        </div>
+
+        <div class="contact-field">
+          <span class="contact-field-title" data-i18n="contact_phone_title">PHONE NUMBER</span>
+          <p class="contact-field-value">
+            <a href="tel:+123-456789">+123-456789</a>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Luxury Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <img src="assets/images/logo.jpg" alt="Habiba Motif" class="footer-logo">
+        <h3 data-i18n="footer_brand">HABIBA MOTIF</h3>
+      </div>
+      <div class="footer-links">
+        <a href="gallery.html" data-i18n="nav_gallery">Gallery</a>
+        <a href="about.html" data-i18n="nav_about">About</a>
+        <a href="contact.html" data-i18n="nav_contact">Contact</a>
+      </div>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/habiba_artstudio" target="_blank" aria-label="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Habiba Motif. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="assets/js/i18n.js"></script>
+</body>
+</html>
