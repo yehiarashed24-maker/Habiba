@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self'; object-src 'none';">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>About Me | Habiba Motif Art Gallery</title>
+  <link rel="icon" href="assets/images/logo.jpg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Minimalist Navigation Switcher with Language Toggle -->
+  <nav class="page-nav" aria-label="Page Navigation">
+    <a href="index.html"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a>
+    <a href="about.html" class="active"><i class="fa-regular fa-user"></i> <span data-i18n="nav_about">About</span></a>
+    <a href="gallery.html"><i class="fa-solid fa-palette"></i> <span data-i18n="nav_gallery">Gallery</span></a>
+    <a href="contact.html"><i class="fa-regular fa-envelope"></i> <span data-i18n="nav_contact">Contact</span></a>
+    <button class="lang-toggle-btn" id="langToggleBtn" aria-label="Change Language"><i class="fa-solid fa-globe"></i> عربي</button>
+  </nav>
+
+  <!-- Main About Me Section (Exact Untitled design.svg Layout) -->
+  <main class="about-container">
+    <span class="about-page-num" data-i18n="about_num">01</span>
+
+    <div class="about-layout">
+      
+      <!-- Left Column: Title & About Me Text -->
+      <div class="about-text-column">
+        <div class="about-header-group">
+          <img src="assets/images/logo.jpg" alt="Habiba Motif Logo" class="about-logo-circle">
+          <h1 class="about-title" data-i18n="about_title">About Me</h1>
+        </div>
+
+        <div class="about-body-text">
+          <p data-i18n="about_p1">
+            I've always been drawn to traditional art on canvas. I admire how this form of artistry has survived past centuries.
+          </p>
+          <p data-i18n="about_p2">
+            I've been painting for 8 years now and my work has been showcased in galleries and international exhibits.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Column: Artist Image -->
+      <div class="about-image-wrapper">
+        <img src="assets/images/about-artist.jpg" alt="Habiba Maarek" class="about-artist-img">
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Luxury Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <img src="assets/images/logo.jpg" alt="Habiba Motif" class="footer-logo">
+        <h3 data-i18n="footer_brand">HABIBA MOTIF</h3>
+      </div>
+      <div class="footer-links">
+        <a href="gallery.html" data-i18n="nav_gallery">Gallery</a>
+        <a href="about.html" data-i18n="nav_about">About</a>
+        <a href="contact.html" data-i18n="nav_contact">Contact</a>
+      </div>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/habiba_artstudio" target="_blank" aria-label="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Habiba Motif. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="assets/js/i18n.js"></script>
+</body>
+</html>
