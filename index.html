@@ -4,26 +4,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self'; object-src 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self'; object-src 'none';">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <title>Habiba Motif | Art Gallery</title>
   <link rel="icon" href="assets/images/logo.jpg">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Allura&family=Cairo:wght@300;400;500;600;700&family=Great+Vibes&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
 
-  <!-- Minimalist Navigation Switcher with Language Toggle -->
-  <nav class="page-nav" aria-label="Page Navigation">
-    <a href="index.html" class="active"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a>
-    <a href="about.html"><i class="fa-regular fa-user"></i> <span data-i18n="nav_about">About</span></a>
-    <a href="gallery.html"><i class="fa-solid fa-palette"></i> <span data-i18n="nav_gallery">Gallery</span></a>
-    <a href="contact.html"><i class="fa-regular fa-envelope"></i> <span data-i18n="nav_contact">Contact</span></a>
-    <button class="lang-toggle-btn" id="langToggleBtn" aria-label="Change Language"><i class="fa-solid fa-globe"></i> عربي</button>
-  </nav>
+        <!-- Hana Bahaa Authentic Luxury Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <nav class="header-nav-left" aria-label="Main Navigation">
+        <a href="index.html" class="active" data-i18n="nav_home">Home</a>
+        <a href="gallery.html" data-i18n="nav_gallery">Gallery</a>
+        <a href="about.html" data-i18n="nav_about">About</a>
+        <a href="contact.html" data-i18n="nav_contact">Contact</a>
+      </nav>
+      <div class="header-center">
+        <a href="index.html" class="header-brand" aria-label="Habiba Motif Home">
+          <img src="assets/images/logo.jpg" alt="Habiba Motif Logo" class="header-brand-logo">
+          <span class="brand-signature">Habiba Motif</span>
+        </a>
+      </div>
+      <div class="header-right">
+        <button class="lang-toggle-btn" id="langToggleBtn" aria-label="Change Language">
+          <i class="fa-solid fa-globe"></i> عربي
+        </button>
+      </div>
+    </div>
+  </header>
 
   <!-- Hero Section -->
   <header class="home-hero">
@@ -49,28 +66,44 @@
     </div>
   </header>
 
-  <!-- Featured Masterpieces Section -->
-  <section class="home-featured">
-    <h2 class="section-title" data-i18n="feat_title">Featured Masterpieces</h2>
-    <div class="featured-grid">
-      <a href="gallery.html" class="featured-card tilt-effect">
-        <img src="https://cdn.mytuhfa.com/artists/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/86da1031-33be-4558-9ae5-087c20abf142.jpg" alt="Quiet Companionship" class="featured-img">
-        <div class="featured-info">
-          <h3 data-i18n="art_1">Quiet Companionship</h3>
+  <!-- A Frame for Every House / Masterpieces Section (Hana Bahaa Style) -->
+  <section class="home-frame-section">
+    <div class="frame-container">
+      <div class="frame-left-content">
+        <h2 class="frame-section-title" data-i18n="frame_title">
+          <em>A frame<br>for every<br>house</em>
+        </h2>
+        <div class="frame-section-desc" data-i18n="frame_desc">
+          <p><em>A wall can hold many things, but the right piece, in the right frame, doesn't just hang, it speaks. Every frame here should fit your space as well as the art.</em></p>
+          <p><em>Which is why the last step of purchase is personalizing the frame...Truly the last brushstroke.</em></p>
         </div>
-      </a>
-      <a href="gallery.html" class="featured-card tilt-effect">
-        <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/a3459c51-000e-49f2-a070-b5cc69322b2c.jpg" alt="Whispers of Copper and Stone" class="featured-img">
-        <div class="featured-info">
-          <h3 data-i18n="art_2">Whispers of Copper</h3>
+      </div>
+
+      <div class="frame-right-wall">
+        <div class="trio-wall-composition">
+          <!-- Main Hero Frame (Left) -->
+          <div class="framed-piece frame-oak frame-main-piece" title="Quiet Companionship">
+            <img src="assets/images/artworks/quiet_companionship.jpg" alt="Quiet Companionship">
+          </div>
+          
+          <!-- Stack of 2 Frames (Right) -->
+          <div class="trio-sub-stack">
+            <div class="framed-piece frame-dark-wood frame-sub-top" title="Whispers of Copper and Stone">
+              <img src="assets/images/artworks/whispers_copper.jpg" alt="Whispers of Copper and Stone">
+            </div>
+            <div class="framed-piece frame-gold frame-sub-bot" title="Coastal dreams">
+              <img src="assets/images/artworks/coastal_dreams.jpg" alt="Coastal dreams">
+            </div>
+          </div>
         </div>
-      </a>
-      <a href="gallery.html" class="featured-card tilt-effect">
-        <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/160263bb-e450-482a-8f9d-4127ca4df36b.jpg" alt="Coastal dreams" class="featured-img">
-        <div class="featured-info">
-          <h3 data-i18n="art_3">Coastal dreams</h3>
-        </div>
-      </a>
+      </div>
+    </div>
+
+    <!-- Made with Care Sub-Block -->
+    <div class="frame-care-block">
+      <div class="care-heart-icon"><i class="fa-regular fa-heart"></i></div>
+      <h3 class="care-title" data-i18n="care_title">Made with Care</h3>
+      <p class="care-desc" data-i18n="care_desc">My art is born from the land I love and the world we share, crafted to move you, connect with you, and live with you.</p>
     </div>
   </section>
 
@@ -83,14 +116,14 @@
         <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/c20fefdb-2e25-4a54-aa9d-636114fda0db.jpg" alt="Art">
         <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/ec23f6fd-40d1-4812-8240-a5e8f4b561d4.jpg" alt="Art">
         <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/970e6922-b5bc-49d4-a4b9-993bb239dd51.jpg" alt="Art">
-        <img src="https://cdn.mytuhfa.com/artists/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/e40cf0a2-9b15-4234-bea0-6fc769712c84.jpg" alt="Art">
+        <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/e40cf0a2-9b15-4234-bea0-6fc769712c84.jpg" alt="Art">
         <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/ab26734a-98a2-4f18-b412-93f88768df62.jpg" alt="Art">
         <!-- Second set for infinite scroll loop -->
         <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/5673a4a8-820f-431f-bddc-ad2d03299aaf.jpg" alt="Art">
         <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/c20fefdb-2e25-4a54-aa9d-636114fda0db.jpg" alt="Art">
         <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/ec23f6fd-40d1-4812-8240-a5e8f4b561d4.jpg" alt="Art">
         <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/970e6922-b5bc-49d4-a4b9-993bb239dd51.jpg" alt="Art">
-        <img src="https://cdn.mytuhfa.com/artists/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/e40cf0a2-9b15-4234-bea0-6fc769712c84.jpg" alt="Art">
+        <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/e40cf0a2-9b15-4234-bea0-6fc769712c84.jpg" alt="Art">
         <img src="https://cdn.mytuhfa.com/artists-optimized/025e10f6-b00e-4acf-b19e-068db59d2934/artwork/ab26734a-98a2-4f18-b412-93f88768df62.jpg" alt="Art">
       </div>
     </div>

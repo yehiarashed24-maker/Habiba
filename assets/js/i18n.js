@@ -14,6 +14,10 @@ const translations = {
     home_headline: "Where passion<br>meets canvas",
     home_cta: "EXPLORE GALLERY",
     feat_title: "Featured Masterpieces",
+    frame_title: "<em>A frame for every house</em>",
+    frame_desc: "<p><em>A wall can hold many things, but the right piece, in the right frame, doesn't just hang, it speaks. Every frame here should fit your space as well as the art.</em></p><p><em>Which is why the last step of purchase is personalizing the frame...Truly the last brushstroke.</em></p>",
+    care_title: "Made with Care",
+    care_desc: "My art is born from the land I love and the world we share, crafted to move you, connect with you, and live with you.",
     art_1: "Quiet Companionship",
     art_2: "Whispers of Copper",
     art_3: "Coastal dreams",
@@ -45,6 +49,10 @@ const translations = {
     home_headline: "حيث يلتقي الشغف<br>بروعة الكانفاس",
     home_cta: "تصفح المعرض",
     feat_title: "لوحات مختارة",
+    frame_title: "<em>إطار لكل منزل</em>",
+    frame_desc: "<p><em>يمكن للجدار أن يحمل الكثير من الأشياء، لكن القطعة المناسبة، في الإطار المناسب، لا تكتفي بالتعليق، بل تتحدث وتعبّر. كل إطار هنا صُمم ليلائم مساحتك بقدر ما يلائم الفن ذاته.</em></p><p><em>ولهذا السبب فإن الخطوة الأخيرة في الاقتناء هي تخصيص الإطار... لمسة الفرشاة الأخيرة بحق.</em></p>",
+    care_title: "صُنع بكل حب وعناية",
+    care_desc: "ينبع فني من الأرض التي أحبها والعالم الذي نتشاركه، صُمم ليلامس وجدانك، يتواصل معك، ويحيى في تفاصيل منزلك.",
     art_1: "رفقة هادئة",
     art_2: "همسات النحاس",
     art_3: "أحلام ساحلية",
@@ -107,7 +115,7 @@ function setLanguage(lang) {
   }
 
   // Preserve lang param in internal navigation links if needed
-  document.querySelectorAll('.page-nav a, .home-cta, .contact-brand a').forEach(link => {
+  document.querySelectorAll('.page-nav a, .header-nav-left a, .header-brand, .home-cta, .contact-brand a').forEach(link => {
     const href = link.getAttribute('href');
     if (href && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
       const url = new URL(href, window.location.href);
