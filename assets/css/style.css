@@ -1185,43 +1185,99 @@ body[dir="rtl"] .care-desc {
 /* Infinite Marquee Section */
 .home-marquee-section {
   background: #050608;
-  padding: 4rem 0;
+  padding: 3.5rem 0;
   overflow: hidden;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  direction: ltr !important; /* Ensure consistent flow in both AR and EN */
+  position: relative;
+}
+
+.home-marquee-section::before,
+.home-marquee-section::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.home-marquee-section::before {
+  left: 0;
+  background: linear-gradient(to right, #050608 0%, transparent 100%);
+}
+
+.home-marquee-section::after {
+  right: 0;
+  background: linear-gradient(to left, #050608 0%, transparent 100%);
 }
 
 .marquee-wrapper {
-  width: 100%;
+  display: flex;
   overflow: hidden;
-  white-space: nowrap;
-  display: flex;
-}
-
-.marquee {
-  display: flex;
+  user-select: none;
   gap: 2rem;
-  padding-left: 2rem;
-  animation: scrollMarquee 30s linear infinite;
+  width: 100%;
+  direction: ltr !important;
 }
 
-.marquee img {
-  height: 250px;
+.marquee-track {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 2rem;
+  min-width: 100%;
+  animation: scrollInfinite 28s linear infinite;
+  will-change: transform;
+}
+
+.marquee-wrapper:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-track img {
+  height: 240px;
   width: auto;
-  object-fit: contain;
-  filter: grayscale(40%) brightness(0.8);
-  transition: filter 0.4s ease, transform 0.4s ease;
+  max-width: 380px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  filter: grayscale(30%) brightness(0.85);
+  transition: filter 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  flex-shrink: 0;
   cursor: pointer;
 }
 
-.marquee img:hover {
-  filter: grayscale(0%) brightness(1.1);
-  transform: scale(1.05);
+.marquee-track img:hover {
+  filter: grayscale(0%) brightness(1.08);
+  transform: scale(1.04);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.1);
+  z-index: 10;
 }
 
-@keyframes scrollMarquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+@keyframes scrollInfinite {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 2rem));
+  }
+}
+
+@media (max-width: 768px) {
+  .home-marquee-section {
+    padding: 2.5rem 0;
+  }
+  .marquee-track img {
+    height: 170px;
+  }
+  .home-marquee-section::before,
+  .home-marquee-section::after {
+    width: 40px;
+  }
 }
 
 /* Artist Snippet */
