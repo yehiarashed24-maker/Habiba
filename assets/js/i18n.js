@@ -37,7 +37,21 @@ const translations = {
     contact_email_title: "EMAIL ADDRESS",
     contact_phone_title: "PHONE NUMBER",
     artist_verified: "Verified artist",
-    lang_btn_text: "عربي"
+    lang_btn_text: "عربي",
+    cat_all: "All Works",
+    cat_watercolor: "Watercolor",
+    cat_cubism: "Cubism",
+    cat_distortion: "Distortion",
+    cat_realistic: "Realistic",
+    cat_sketches: "Sketches",
+    cat_status_all: "All Works • 12 Masterpieces",
+    cat_status_watercolor: "Watercolor • 4 Masterpieces",
+    cat_status_cubism: "Cubism • 3 Masterpieces",
+    cat_status_distortion: "Distortion • 2 Masterpieces",
+    cat_status_realistic: "Realistic • 2 Masterpieces",
+    cat_status_sketches: "Sketches • 1 Masterpiece",
+    view_horizontal: "Stroll",
+    view_grid: "Salon Grid"
   },
   ar: {
     nav_home: "الرئيسية",
@@ -72,7 +86,21 @@ const translations = {
     contact_email_title: "البريد الإلكتروني",
     contact_phone_title: "رقم الهاتف",
     artist_verified: "فنان موثق",
-    lang_btn_text: "English"
+    lang_btn_text: "English",
+    cat_all: "جميع اللوحات",
+    cat_watercolor: "ألوان مائية",
+    cat_cubism: "تكعيبية",
+    cat_distortion: "تشويه فني",
+    cat_realistic: "واقعية",
+    cat_sketches: "اسكتشات",
+    cat_status_all: "جميع اللوحات • ١٢ عملاً فنياً",
+    cat_status_watercolor: "ألوان مائية • ٤ أعمال فنية",
+    cat_status_cubism: "المدرسة التكعيبية • ٣ أعمال فنية",
+    cat_status_distortion: "التشويه الفني التعبيري • عملان فنيان",
+    cat_status_realistic: "المدرسة الواقعية • عملان فنيان",
+    cat_status_sketches: "اسكتشات ورقية • رسمة أصلية واحدة",
+    view_horizontal: "ممشى المعرض",
+    view_grid: "شبكة الصالون"
   }
 };
 

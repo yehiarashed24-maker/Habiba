@@ -295,6 +295,24 @@ a {
   padding: clamp(2.5rem, 5vh, 4.5rem) 2rem clamp(2.5rem, 5vh, 4.5rem);
   position: relative;
   text-align: center;
+  overflow: hidden;
+}
+
+.hero-dust-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.home-brand,
+.home-headline,
+.hero-bottom {
+  position: relative;
+  z-index: 2;
 }
 
 .home-brand {
@@ -724,6 +742,7 @@ body[dir="rtl"] .gallery-header-logo {
 }
 
 .gallery-grid {
+  will-change: opacity, transform;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -770,7 +789,7 @@ body[dir="rtl"] .gallery-header-logo {
 }
 
 .gallery-item:hover {
-  transform: scale(1.03);
+  /* Fixed museum viewpoint */
 }
 
 .gallery-item-img {
@@ -994,6 +1013,7 @@ body[dir="rtl"] .frame-section-desc {
   display: flex;
   justify-content: center;
   align-items: center;
+  perspective: 1200px;
 }
 
 .trio-wall-composition {
@@ -1003,11 +1023,14 @@ body[dir="rtl"] .frame-section-desc {
   max-width: 540px;
   width: 100%;
   cursor: default !important;
+  transform-style: preserve-3d;
+  perspective: 1200px;
 }
 
 .frame-main-piece {
   flex: 1.15;
   height: 380px;
+  transform-style: preserve-3d;
 }
 
 .trio-sub-stack {
@@ -1015,14 +1038,17 @@ body[dir="rtl"] .frame-section-desc {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  transform-style: preserve-3d;
 }
 
 .frame-sub-top {
   height: 183px;
+  transform-style: preserve-3d;
 }
 
 .frame-sub-bot {
   height: 183px;
+  transform-style: preserve-3d;
 }
 
 /* Authentic Frames with Multi-layer drop shadows and matting */
@@ -1037,6 +1063,9 @@ body[dir="rtl"] .frame-section-desc {
   overflow: hidden;
   cursor: default !important;
   user-select: none;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 0.4s ease;
 }
 
 .framed-piece img {
@@ -1338,6 +1367,20 @@ body[dir="rtl"] .snippet-link { font-family: 'Cairo', sans-serif; }
   text-align: center;
 }
 
+.home-video-section .section-title {
+  color: #ffffff;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 3.5rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+body[dir="rtl"] .home-video-section .section-title {
+  font-family: 'Amiri', serif !important;
+}
+
 .video-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1356,37 +1399,49 @@ body[dir="rtl"] .snippet-link { font-family: 'Cairo', sans-serif; }
   cursor: pointer; /* Indicate it's clickable */
 }
 
-/* Custom Play Button Overlay */
+/* Custom Play Button Overlay - Centered with inset: 0 and margin: auto */
 .custom-play-btn {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  inset: 0;
+  margin: auto;
+  width: 62px;
+  height: 62px;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  font-size: 1.5rem;
+  color: #ffffff;
+  font-size: 1.35rem;
   z-index: 5;
-  transition: all 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, opacity 0.3s ease;
   pointer-events: none; /* Let clicks pass through to video/card */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.custom-play-btn i {
+  margin-left: 4px; /* Optical center compensation for right-pointing triangle */
+  line-height: 1;
+}
+
+body[dir="rtl"] .custom-play-btn i {
+  margin-left: 0;
+  margin-right: 4px;
 }
 
 .video-card:hover .custom-play-btn {
-  background: rgba(255, 255, 255, 0.4);
-  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(225, 190, 120, 0.5);
+  border-color: rgba(255, 235, 195, 0.95);
+  box-shadow: 0 0 30px rgba(225, 190, 120, 0.6);
+  transform: scale(1.15);
 }
 
 .video-card.playing .custom-play-btn {
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.8);
+  transform: scale(0.65);
 }
 
 .video-card video {
@@ -1538,3 +1593,854 @@ body[dir="rtl"] .site-footer { font-family: 'Cairo', sans-serif; }
   }
 }
 
+/* ==========================================================================
+   ANIME.JS V4 - LUXURY HOME MOTION ENHANCEMENTS
+   ========================================================================== */
+
+.care-heart-icon i {
+  display: inline-block;
+  will-change: transform, color, filter;
+  transition: transform 0.3s ease;
+}
+
+/* Luxury aura glow for video cards on hover */
+.video-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 25px rgba(225, 190, 120, 0.2);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.video-card:hover::after {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   FEATURE 1: CURATOR'S GALLERY SPOTLIGHT (WARM AMBIENT GLOW)
+   ========================================================================== */
+.curator-spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 600px;
+  height: 600px;
+  margin-left: -300px;
+  margin-top: -300px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(245, 220, 160, 0.07) 0%, rgba(225, 190, 120, 0.025) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 998;
+  will-change: transform;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.curator-spotlight.active {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   FEATURE 2: 3D GALLERY DECK FAN-OUT
+   ========================================================================== */
+.trio-wall-composition {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.framed-piece {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.4s ease;
+}
+
+/* ==========================================================================
+   FEATURE 3: LIQUID GOLD LEAF SHIMMER EFFECT
+   ========================================================================== */
+@keyframes goldLeafShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.framed-piece::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(115deg, transparent 20%, rgba(245, 220, 160, 0.4) 40%, rgba(255, 240, 190, 0.8) 50%, rgba(245, 220, 160, 0.4) 60%, transparent 80%);
+  background-size: 200% 100%;
+  opacity: 0;
+  z-index: 4;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
+.framed-piece:hover::before {
+  opacity: 1;
+  animation: goldLeafShimmer 2.2s infinite ease-in-out;
+}
+
+.home-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 15%, rgba(255, 240, 190, 0.35) 45%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 240, 190, 0.35) 55%, transparent 85%);
+  background-size: 200% 100%;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.home-cta:hover::before {
+  opacity: 1;
+  animation: goldLeafShimmer 1.8s infinite ease-in-out;
+}
+
+/* ==========================================================================
+   FEATURE 4: ARTIST'S BRUSHSTROKE SCROLL INDICATOR
+   ========================================================================== */
+.brush-scroll-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.04);
+  z-index: 10001;
+  pointer-events: none;
+}
+
+.brush-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #c69335, #e5c158, #fae29c, #e5c158);
+  box-shadow: 0 0 10px rgba(229, 193, 88, 0.6);
+  position: relative;
+  border-radius: 0 2px 2px 0;
+  will-change: width;
+}
+
+.brush-tip {
+  position: absolute;
+  right: -4px;
+  top: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fae29c;
+  box-shadow: 0 0 8px #fae29c, 0 0 14px rgba(229, 193, 88, 0.8);
+}
+
+
+
+
+
+
+/* ==========================================================================
+   HABIBA MOTIF - ARTIST'S ATELIER PALETTE (AUTHENTIC STUDIO AESTHETIC)
+   ========================================================================== */
+
+/* Background Gallery Watermark - Elegant Artist Signature Calligraphy */
+.gallery-watermark {
+  position: fixed;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Alex Brush', 'Great Vibes', cursive;
+  font-size: clamp(5rem, 16vw, 16rem);
+  color: #fae29c;
+  opacity: 0.045;
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
+  user-select: none;
+  transition: opacity 0.5s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+body[dir="rtl"] .gallery-watermark {
+  font-family: 'Cairo', serif;
+  font-weight: 700;
+  font-size: clamp(4rem, 13vw, 13rem);
+  opacity: 0.035;
+}
+
+/* The Atelier Artist Dock */
+.gallery-curator-dock {
+  position: fixed;
+  top: 4.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  width: 95%;
+  max-width: 980px;
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+.curator-dock-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  pointer-events: auto;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Authentic Artist Palette Strip - Warm, Organic, No Cyber Pills */
+.curator-dock-glass {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.42rem 1.25rem;
+  background: rgba(18, 14, 11, 0.72);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-top: 1px solid rgba(220, 190, 110, 0.4);
+  border-bottom: 1px solid rgba(220, 190, 110, 0.22);
+  border-left: none;
+  border-right: none;
+  border-radius: 6px;
+  box-shadow: 
+    0 18px 45px -10px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  overflow: visible;
+  max-width: 100%;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.curator-dock-glass::-webkit-scrollbar {
+  display: none;
+}
+
+/* Subtle Atelier Corner Brackets (Artist Frame Corners) */
+.curator-dock-glass::before,
+.curator-dock-glass::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  border-top: 2px solid #c8a951;
+  border-bottom: 2px solid #c8a951;
+  pointer-events: none;
+  opacity: 0.75;
+}
+.curator-dock-glass::before {
+  left: 0;
+  border-left: 2px solid #c8a951;
+  border-radius: 4px 0 0 4px;
+}
+.curator-dock-glass::after {
+  right: 0;
+  border-right: 2px solid #c8a951;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Authentic Painter's Brushstroke Underline Indicator */
+.curator-dock-indicator {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  height: 7px;
+  width: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 16' preserveAspectRatio='none'%3E%3Cpath d='M 3 9 C 25 4, 60 12, 95 7 C 120 4, 145 10, 157 8 C 142 12, 90 14, 50 11 C 25 9, 8 11, 3 9 Z' fill='%23fae29c'/%3E%3Cpath d='M 12 11 C 45 7, 95 12, 148 9 C 130 13, 70 14, 25 11 Z' fill='%23c8a951' opacity='0.75'/%3E%3C/svg%3E") no-repeat center center;
+  background-size: 100% 100%;
+  filter: drop-shadow(0 0 8px rgba(250, 226, 156, 0.6));
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.2, 1), width 0.4s cubic-bezier(0.2, 0.9, 0.2, 1);
+  will-change: transform, width;
+}
+
+/* Category Tab - Artistic Studio Medium */
+.curator-tab {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.48rem 0.95rem;
+  background: transparent;
+  border: none;
+  color: rgba(243, 239, 230, 0.72);
+  font-family: 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 0.88rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.25s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+body[dir="rtl"] .curator-tab {
+  font-family: 'Cairo', serif;
+  font-size: 0.92rem;
+  letter-spacing: 0;
+}
+
+/* Real Artist Paint Swatch / Dab Dot */
+.paint-dab {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  position: relative;
+}
+
+.paint-dab::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+/* Swatch Colors matching real oil & watercolor pigments */
+.dab-all {
+  background: linear-gradient(135deg, #fae29c, #c8a951);
+  color: #fae29c;
+}
+.dab-watercolor {
+  background: radial-gradient(circle at 35% 35%, #62bed9, #2b6c80);
+  color: #52afc9;
+}
+.dab-cubism {
+  background: radial-gradient(circle at 35% 35%, #e8984a, #8f481c);
+  color: #d97f38;
+}
+.dab-distortion {
+  background: radial-gradient(circle at 35% 35%, #9b72cf, #472b7a);
+  color: #9363d1;
+}
+.dab-realistic {
+  background: radial-gradient(circle at 35% 35%, #67ab78, #2a5c36);
+  color: #579e68;
+}
+.dab-sketches {
+  background: radial-gradient(circle at 35% 35%, #a8a29e, #44403c);
+  color: #a8a29e;
+}
+
+.curator-tab:hover {
+  color: #ffffff;
+}
+.curator-tab:hover .paint-dab {
+  transform: scale(1.35);
+  box-shadow: 0 0 10px currentColor, 0 0 16px currentColor;
+}
+
+.curator-tab.active {
+  color: #fae29c;
+  font-weight: 600;
+  text-shadow: 0 0 14px rgba(250, 226, 156, 0.45);
+}
+.curator-tab.active .paint-dab {
+  transform: scale(1.4);
+  box-shadow: 0 0 12px currentColor, 0 0 20px currentColor;
+}
+
+/* Atelier Sub-strip - Handwritten Studio Vibe */
+.curator-status-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.2rem 0.85rem;
+  background: transparent;
+  border: none;
+  font-size: 0.76rem;
+  font-family: 'Plus Jakarta Sans', serif;
+  letter-spacing: 0.08em;
+  color: rgba(250, 226, 156, 0.75);
+  text-transform: uppercase;
+  pointer-events: auto;
+  box-shadow: none;
+}
+
+body[dir="rtl"] .curator-status-strip {
+  font-family: 'Cairo', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0;
+}
+
+.curator-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c8a951;
+  box-shadow: 0 0 8px #fae29c;
+}
+
+/* 3D PERSPECTIVE ENVIRONMENT ON GALLERY GRID */
+.gallery-grid {
+  perspective: 1600px;
+  transform-style: preserve-3d;
+}
+
+/* 3D Masterpiece Cards & Unveiling Sheen */
+.gallery-item {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  position: relative;
+  transition: box-shadow 0.5s ease;
+}
+
+  30% { opacity: 1; }
+  100% { left: 220%; opacity: 0; }
+}
+
+/* Enhanced Painting Shadows */
+.gallery-item-img {
+  box-shadow: 
+    0 25px 60px -12px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 30px rgba(200, 169, 81, 0.08);
+  transition: box-shadow 0.4s ease, filter 0.4s ease;
+}
+
+/* Category Badge in Artwork Card */
+.gallery-item-category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-start;
+  padding: 0.22rem 0.75rem;
+  border-radius: 4px;
+  background: rgba(200, 169, 81, 0.16);
+  border: 1px solid rgba(250, 226, 156, 0.45);
+  color: #fae29c;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-bottom: 0.45rem;
+  box-shadow: 0 0 14px rgba(200, 169, 81, 0.25);
+  backdrop-filter: blur(8px);
+}
+
+body[dir="rtl"] .gallery-item-category-tag {
+  font-family: 'Cairo', sans-serif;
+  letter-spacing: 0;
+  font-size: 0.72rem;
+  align-self: flex-start;
+}
+
+/* Filtering animation states */
+.gallery-item.is-filtered-out {
+  display: none !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+  .gallery-curator-dock {
+    top: 4.4rem;
+    width: 96%;
+  }
+  .curator-tab {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  .curator-status-strip {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .gallery-curator-dock {
+    top: 4.2rem;
+  }
+  .curator-dock-glass {
+    overflow-x: auto;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.35rem 0.75rem;
+  }
+  .curator-tab {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.76rem;
+    gap: 0.4rem;
+  }
+  .paint-dab {
+    width: 7px;
+    height: 7px;
+  }
+}
+
+
+/* ==========================================================================
+   THE GRAND ATELIER CURTAIN REVEAL & LIVE BRUSHSTROKE HEADLINE
+   ========================================================================== */
+
+/* Live Brushstroke Underline beneath Headline */
+.headline-brushstroke-wrapper {
+  display: block;
+  width: min(90%, 360px);
+  margin: 0.85rem auto 0 auto;
+  height: 26px;
+  position: relative;
+}
+
+.hero-brushstroke-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 10px rgba(250, 226, 156, 0.55));
+}
+
+/* ==========================================================================
+   GRAND THEATER VELVET CURTAIN OPENING (فتحة مسرح كلاسيكية موثوقة 100%)
+   ========================================================================== */
+
+.theater-curtain-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  pointer-events: none;
+  overflow: hidden;
+  background: transparent;
+  animation: fadeOutCurtainStage 0.4s ease 1.7s forwards;
+}
+
+@keyframes fadeOutCurtainStage {
+  0% { opacity: 1; visibility: visible; }
+  99% { opacity: 0; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; display: none !important; }
+}
+
+.theater-curtain-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 51vw;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      rgba(14, 9, 6, 0.98) 0px,
+      rgba(36, 24, 17, 0.98) 22px,
+      rgba(18, 12, 8, 0.98) 44px,
+      rgba(46, 32, 23, 0.98) 66px,
+      rgba(14, 9, 6, 0.98) 88px
+    ),
+    linear-gradient(180deg, #120b07 0%, #1a110a 50%, #0a0604 100%);
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.95);
+  will-change: transform;
+}
+
+.curtain-panel-left {
+  left: 0;
+  border-right: 2px solid rgba(220, 190, 110, 0.65);
+  box-shadow: 25px 0 80px rgba(0, 0, 0, 0.95);
+  transform-origin: left top;
+  animation: theaterOpenLeft 1.35s cubic-bezier(0.77, 0, 0.175, 1) 0.25s forwards;
+}
+
+.curtain-panel-right {
+  right: 0;
+  border-left: 2px solid rgba(220, 190, 110, 0.65);
+  box-shadow: -25px 0 80px rgba(0, 0, 0, 0.95);
+  transform-origin: right top;
+  animation: theaterOpenRight 1.35s cubic-bezier(0.77, 0, 0.175, 1) 0.25s forwards;
+}
+
+@keyframes theaterOpenLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-105%); }
+}
+
+@keyframes theaterOpenRight {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(105%); }
+}
+
+/* Center Golden Theater Cord */
+.curtain-center-cord {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  background: linear-gradient(180deg, #fae29c, #c8a951, #7a5a1e, #fae29c);
+  box-shadow: 0 0 16px rgba(250, 226, 156, 0.9);
+  z-index: 2;
+  animation: cordFadeOut 0.35s ease 0.2s forwards;
+}
+
+@keyframes cordFadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.curtain-velvet-pleats {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center bottom, rgba(0, 0, 0, 0.65) 0%, transparent 80%);
+  pointer-events: none;
+}
+/* ==========================================================================
+   PURE ZERO-SCROLL GALLERY VIEWPORT (إلغاء أي اسكرول أو شريط تمرير)
+   ========================================================================== */
+
+html.gallery-page,
+body.gallery-page {
+  overflow: hidden !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  width: 100vw !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  touch-action: pan-x;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html.gallery-page::-webkit-scrollbar,
+body.gallery-page::-webkit-scrollbar,
+html.gallery-page *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+html.gallery-page * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.gallery-page .gallery-container {
+  overflow: hidden !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+}
+
+.gallery-page .gallery-grid {
+  overflow-y: hidden !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+/* Centered Theater Stage Loading Logo */
+.theater-stage-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  pointer-events: none;
+  animation: stageLogoDissolve 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+  will-change: transform, opacity, filter;
+}
+
+.theater-logo-frame {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, #fae29c, #c8a951, #7a5a1e, #fae29c);
+  box-shadow: 
+    0 0 45px rgba(200, 169, 81, 0.55),
+    0 12px 35px rgba(0, 0, 0, 0.9);
+}
+
+.theater-logo-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.theater-logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(250, 226, 156, 0.35) 0%, rgba(200, 169, 81, 0.1) 50%, transparent 70%);
+  filter: blur(12px);
+  pointer-events: none;
+  animation: pulseGlow 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+}
+
+.theater-logo-caption {
+  font-family: 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #fae29c;
+  text-shadow: 0 0 16px rgba(250, 226, 156, 0.8);
+}
+
+@keyframes stageLogoDissolve {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.12);
+    filter: blur(8px);
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE POLISH SUITE (RESPONSIVE TOUCH & NOTCH OPTIMIZATIONS)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Safe area insets for notched phones */
+  .site-header {
+    padding-top: env(safe-area-inset-top, 0.5rem);
+    height: auto;
+    min-height: 3.8rem;
+  }
+
+  /* Gallery Curator Dock on Mobile */
+  .gallery-curator-dock {
+    top: calc(3.8rem + env(safe-area-inset-top, 0px));
+    width: 100vw;
+    max-width: 100vw;
+    padding: 0 0.5rem;
+    gap: 0.35rem;
+  }
+
+  .curator-dock-inner {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .curator-dock-glass {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding: 0.35rem 0.65rem;
+    gap: 0.3rem;
+    justify-content: flex-start;
+    border-radius: 4px;
+  }
+
+  .curator-tab {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+  }
+
+  .curator-status-strip {
+    font-size: 0.68rem;
+    padding: 0.15rem 0.5rem;
+    max-width: 92vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Theater Curtain Mobile Scale */
+  .theater-stage-logo {
+    gap: 0.65rem;
+  }
+  .theater-logo-frame {
+    width: 76px;
+    height: 76px;
+  }
+  .theater-logo-caption {
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+  }
+  .theater-logo-glow {
+    width: 110px;
+    height: 110px;
+  }
+
+  /* Live Brushstroke Underline on Mobile */
+  .headline-brushstroke-wrapper {
+    width: min(85%, 280px);
+    height: 22px;
+    margin-top: 0.5rem;
+  }
+
+  /* Gallery Stroll Mobile Snap */
+  .gallery-page .gallery-container {
+    height: 100dvh !important;
+  }
+
+  .gallery-page .gallery-grid {
+    height: 100dvh !important;
+    padding: 0 10vw;
+    gap: 10vw;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .gallery-item-img {
+    max-height: 52vh;
+    max-width: 82vw;
+    object-fit: contain;
+  }
+
+  .gallery-item-info {
+    bottom: 2%;
+    width: 90%;
+    max-width: 320px;
+    padding: 0.8rem 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .curator-tab {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.74rem;
+    gap: 0.3rem;
+  }
+  .paint-dab {
+    width: 7px;
+    height: 7px;
+  }
+  .gallery-item-title {
+    font-size: 0.95rem;
+  }
+  .gallery-item-price {
+    font-size: 0.95rem;
+  }
+}
