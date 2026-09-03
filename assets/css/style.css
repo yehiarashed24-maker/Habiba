@@ -2326,58 +2326,224 @@ html.gallery-page * {
 
 
 /* ==========================================================================
-   MOBILE POLISH SUITE (RESPONSIVE TOUCH & NOTCH OPTIMIZATIONS)
+   MOBILE PERFECTION FOR GALLERY (NO OVERLAP, NO CUTOFF, NO SCROLLBAR)
    ========================================================================== */
 
 @media (max-width: 768px) {
-  /* Safe area insets for notched phones */
-  .site-header {
-    padding-top: env(safe-area-inset-top, 0.5rem);
-    height: auto;
-    min-height: 3.8rem;
+  /* 1. Viewport & Body: Prevent unwanted page jumps */
+  html.gallery-page,
+  body.gallery-page {
+    position: relative !important;
+    overflow: hidden !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  /* Gallery Curator Dock on Mobile */
+  /* 2. Compact Mobile Header on Gallery Page */
+  .gallery-page .site-header {
+    position: relative !important;
+    padding: 0.5rem 1rem 0.35rem 1rem !important;
+    background: #121212 !important;
+    z-index: 100;
+  }
+
+  .gallery-page .site-header .header-inner {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.3rem !important;
+  }
+
+  .gallery-page .header-nav-left {
+    order: 3 !important;
+    width: 100% !important;
+    justify-content: center !important;
+    gap: 1.2rem !important;
+    padding-top: 0.25rem !important;
+    margin-top: 0.1rem !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .gallery-page .header-nav-left a {
+    font-size: 0.82rem !important;
+  }
+
+  /* 3. Curator Category Dock: Sits Naturally Below Navbar */
   .gallery-curator-dock {
-    top: calc(3.8rem + env(safe-area-inset-top, 0px));
-    width: 100vw;
-    max-width: 100vw;
-    padding: 0 0.5rem;
-    gap: 0.35rem;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: 0.25rem auto 0 auto !important;
+    padding: 0 0.5rem !important;
+    z-index: 90 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.2rem !important;
   }
 
   .curator-dock-inner {
-    width: 100%;
-    justify-content: flex-start;
+    width: 100% !important;
+    justify-content: center !important;
   }
 
   .curator-dock-glass {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    padding: 0.35rem 0.65rem;
-    gap: 0.3rem;
-    justify-content: flex-start;
-    border-radius: 4px;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 0.3rem 0.6rem !important;
+    gap: 0.25rem !important;
+    justify-content: flex-start !important;
+    background: rgba(18, 14, 11, 0.88) !important;
+    border-radius: 6px !important;
+  }
+
+  .curator-dock-glass::-webkit-scrollbar {
+    display: none !important;
   }
 
   .curator-tab {
-    padding: 0.4rem 0.65rem;
-    font-size: 0.78rem;
-    flex-shrink: 0;
+    flex: 0 0 auto !important;
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.76rem !important;
+    gap: 0.35rem !important;
+  }
+
+  .paint-dab {
+    width: 7px !important;
+    height: 7px !important;
   }
 
   .curator-status-strip {
-    font-size: 0.68rem;
-    padding: 0.15rem 0.5rem;
-    max-width: 92vw;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.66rem !important;
+    padding: 0.1rem 0.5rem !important;
+    letter-spacing: 0.04em !important;
+    opacity: 0.85;
   }
 
-  /* Theater Curtain Mobile Scale */
+  /* 4. Gallery Container: Fills exact remaining height */
+  .gallery-page .gallery-container {
+    height: calc(100dvh - 145px) !important;
+    min-height: unset !important;
+    width: 100vw !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  .gallery-page .gallery-content-wrapper {
+    height: 100% !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .gallery-page .gallery-grid {
+    height: 100% !important;
+    width: 100vw !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 0 8vw !important;
+    gap: 7vw !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* 5. Artwork Cards on Mobile: Vertical Unified Card */
+  .gallery-page .gallery-item {
+    scroll-snap-align: center !important;
+    flex: 0 0 82vw !important;
+    width: 82vw !important;
+    max-width: 350px !important;
+    height: auto !important;
+    max-height: 94% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+  }
+
+  .gallery-page .gallery-item-img {
+    max-height: 38vh !important;
+    max-width: 100% !important;
+    width: auto !important;
+    object-fit: contain !important;
+    border: 6px solid #1a1c22 !important;
+    padding: 8px !important;
+    -webkit-box-reflect: none !important; /* CRITICAL: Remove reflection so info box fits on screen! */
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75) !important;
+  }
+
+  /* Placard / Info Box: Sits Directly and Securely Under the Painting */
+  .gallery-page .gallery-item-info {
+    position: static !important; /* IN-FLOW directly below image! */
+    bottom: auto !important;
+    right: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    min-width: unset !important;
+    margin-top: 0.6rem !important;
+    padding: 0.65rem 0.95rem !important;
+    border-radius: 4px !important;
+    background: rgba(250, 248, 242, 0.95) !important;
+    border-left: 3px solid #c8a951 !important;
+    border-right: none !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  body[dir="rtl"].gallery-page .gallery-item-info {
+    border-left: none !important;
+    border-right: 3px solid #c8a951 !important;
+  }
+
+  .gallery-page .gallery-item-category-tag {
+    font-size: 0.62rem !important;
+    padding: 0.15rem 0.55rem !important;
+    margin-bottom: 0.2rem !important;
+  }
+
+  .gallery-page .gallery-item-title {
+    font-size: 0.95rem !important;
+    margin-bottom: 0.15rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .gallery-page .gallery-item-artist {
+    font-size: 0.76rem !important;
+    margin-bottom: 0.3rem !important;
+  }
+
+  .gallery-page .gallery-item-price {
+    font-size: 0.95rem !important;
+  }
+
+  /* Atmospheric Watermark on Mobile */
+  .gallery-watermark {
+    font-size: clamp(3rem, 11vw, 5.5rem) !important;
+    top: 50% !important;
+    opacity: 0.03 !important;
+  }
+
+  /* Home Page Adjustments */
   .theater-stage-logo {
     gap: 0.65rem;
   }
@@ -2393,54 +2559,22 @@ html.gallery-page * {
     width: 110px;
     height: 110px;
   }
-
-  /* Live Brushstroke Underline on Mobile */
   .headline-brushstroke-wrapper {
     width: min(85%, 280px);
     height: 22px;
     margin-top: 0.5rem;
   }
-
-  /* Gallery Stroll Mobile Snap */
-  .gallery-page .gallery-container {
-    height: 100dvh !important;
-  }
-
-  .gallery-page .gallery-grid {
-    height: 100dvh !important;
-    padding: 0 10vw;
-    gap: 10vw;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .gallery-item-img {
-    max-height: 52vh;
-    max-width: 82vw;
-    object-fit: contain;
-  }
-
-  .gallery-item-info {
-    bottom: 2%;
-    width: 90%;
-    max-width: 320px;
-    padding: 0.8rem 1rem;
-  }
 }
 
-@media (max-width: 420px) {
-  .curator-tab {
-    padding: 0.35rem 0.55rem;
-    font-size: 0.74rem;
-    gap: 0.3rem;
+@media (max-width: 380px) {
+  .gallery-page .gallery-item {
+    flex: 0 0 86vw !important;
+    width: 86vw !important;
   }
-  .paint-dab {
-    width: 7px;
-    height: 7px;
+  .gallery-page .gallery-item-img {
+    max-height: 34vh !important;
   }
-  .gallery-item-title {
-    font-size: 0.95rem;
-  }
-  .gallery-item-price {
-    font-size: 0.95rem;
+  .gallery-page .gallery-item-info {
+    padding: 0.55rem 0.75rem !important;
   }
 }
