@@ -2019,25 +2019,24 @@ body[dir="rtl"] .curator-status-strip {
   transition: box-shadow 0.4s ease, filter 0.4s ease;
 }
 
-/* Category Badge in Artwork Card */
+/* Category Badge in Artwork Card - Crystal Clear High-Contrast Seal */
 .gallery-item-category-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   align-self: flex-start;
-  padding: 0.22rem 0.75rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 4px;
-  background: rgba(200, 169, 81, 0.16);
-  border: 1px solid rgba(250, 226, 156, 0.45);
-  color: #fae29c;
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  background: #18130f !important;
+  border: 1px solid #c8a951 !important;
+  color: #fae29c !important;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  margin-bottom: 0.45rem;
-  box-shadow: 0 0 14px rgba(200, 169, 81, 0.25);
-  backdrop-filter: blur(8px);
+  margin-bottom: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 body[dir="rtl"] .gallery-item-category-tag {
@@ -2516,9 +2515,17 @@ html.gallery-page * {
   }
 
   .gallery-page .gallery-item-category-tag {
-    font-size: 0.62rem !important;
-    padding: 0.15rem 0.55rem !important;
-    margin-bottom: 0.2rem !important;
+    display: inline-flex !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    padding: 0.22rem 0.65rem !important;
+    margin-bottom: 0.35rem !important;
+    background: #18130f !important;
+    border: 1px solid #c8a951 !important;
+    color: #fae29c !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35) !important;
+    opacity: 1 !important;
   }
 
   .gallery-page .gallery-item-title {
