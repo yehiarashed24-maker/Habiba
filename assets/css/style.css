@@ -691,17 +691,7 @@ a {
 }
 
 /* Dynamic Ambient Glow Layer - Brighter & warmer */
-.gallery-ambient-layer {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #353b4a;
-  mask-image: radial-gradient(circle at 50% 50%, black 25%, transparent 85%);
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 25%, transparent 85%);
-  transition: background-color 1.2s ease-in-out;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.85;
-}
+.gallery-ambient-layer { display: none !important; }
 
 /* Subtle texture for the wall */
 .gallery-container::before {
@@ -774,18 +764,9 @@ body[dir="rtl"] .gallery-header-logo {
   transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Spotlight Beam falling on each painting - Elevated Luminance */
+/* Spotlight Beam removed per user request */
 .gallery-item::before {
-  content: '';
-  position: absolute;
-  top: -20vh;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70vw;
-  height: 125vh;
-  background: radial-gradient(ellipse at center top, rgba(255, 252, 240, 0.26) 0%, rgba(255, 248, 230, 0.1) 45%, transparent 75%);
-  pointer-events: none;
-  z-index: 1;
+  display: none;
 }
 
 .gallery-item:hover {
@@ -1706,37 +1687,11 @@ body[dir="rtl"] .site-footer { font-family: 'Cairo', sans-serif; }
 /* ==========================================================================
    FEATURE 4: ARTIST'S BRUSHSTROKE SCROLL INDICATOR
    ========================================================================== */
-.brush-scroll-track {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.04);
-  z-index: 10001;
-  pointer-events: none;
-}
+.brush-scroll-track { display: none !important; }
 
-.brush-progress-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #c69335, #e5c158, #fae29c, #e5c158);
-  box-shadow: 0 0 10px rgba(229, 193, 88, 0.6);
-  position: relative;
-  border-radius: 0 2px 2px 0;
-  will-change: width;
-}
+.brush-progress-bar { display: none !important; }
 
-.brush-tip {
-  position: absolute;
-  right: -4px;
-  top: -3px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #fae29c;
-  box-shadow: 0 0 8px #fae29c, 0 0 14px rgba(229, 193, 88, 0.8);
-}
+.brush-tip { display: none !important; }
 
 
 
@@ -1992,16 +1947,14 @@ body[dir="rtl"] .curator-status-strip {
   box-shadow: 0 0 8px #fae29c;
 }
 
-/* 3D PERSPECTIVE ENVIRONMENT ON GALLERY GRID */
+/* Gallery Grid - No 3D (prevents mobile crash on back navigation) */
 .gallery-grid {
-  perspective: 1600px;
-  transform-style: preserve-3d;
+  /* perspective removed - causes GPU memory crash on mobile */
 }
 
-/* 3D Masterpiece Cards & Unveiling Sheen */
+/* Gallery Item */
 .gallery-item {
-  transform-style: preserve-3d;
-  will-change: transform, opacity;
+  will-change: opacity, transform;
   position: relative;
   transition: box-shadow 0.5s ease;
 }

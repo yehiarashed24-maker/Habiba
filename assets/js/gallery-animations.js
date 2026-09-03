@@ -141,7 +141,6 @@
         // Step 1: Rapid, elegant cross-dissolve softens the grid (130ms)
         animate(galleryGrid, {
           opacity: [1, 0.15],
-          scale: [1, 0.985],
           duration: 130,
           ease: 'outQuad',
           onComplete: () => {
@@ -172,18 +171,16 @@
             // Step 3: Unveil grid smoothly with 60fps golden spring wave (300ms)
             animate(galleryGrid, {
               opacity: [0.15, 1],
-              scale: [0.985, 1],
-              duration: 300,
+              duration: 250,
               ease: 'outQuart'
             });
 
             const activeItems = galleryItems.filter(el => !el.classList.contains('is-filtered-out'));
             animate(activeItems, {
               opacity: [0, 1],
-              translateY: [35, 0],
-              rotateY: [-10, 0],
-              duration: 480,
-              delay: stagger(60),
+              translateY: [20, 0],
+              duration: 400,
+              delay: stagger(50),
               ease: 'outQuart'
             });
           }
@@ -254,11 +251,10 @@
     if (animate) {
       animate(galleryItems, {
         opacity: [0, 1],
-        translateY: [60, 0],
-        rotateY: [-12, 0],
-        scale: [0.9, 1],
+        translateY: [30, 0],
+        scale: [0.95, 1],
         delay: stagger(80, { start: 180 }),
-        duration: 850,
+        duration: 750,
         ease: 'outQuart'
       });
     }
