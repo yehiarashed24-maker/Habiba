@@ -6,9 +6,83 @@
 (function () {
   'use strict';
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadDynamicArtworks();
     initOriginalGallery();
   });
+
+  async function loadDynamicArtworks() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    if (!galleryGrid) return;
+
+    let data = null;
+    const localVault = localStorage.getItem('hm_gallery_artworks');
+    if (localVault) {
+      try {
+        const parsed = JSON.parse(localVault);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          data = parsed;
+        }
+      } catch (e) {}
+    }
+
+    if (!data) {
+      try {
+        const res = await fetch('assets/data/artworks.json');
+        if (res.ok) {
+          data = await res.json();
+        }
+      } catch (e) {}
+    }
+
+    if (!data || !data.length) return;
+
+    // Render dynamic items into grid
+    galleryGrid.innerHTML = '';
+    data.forEach((art, idx) => {
+      const a = document.createElement('a');
+      a.href = art.link || '#';
+      a.className = 'gallery-item';
+      a.setAttribute('data-category', (art.category || 'watercolor').toLowerCase());
+      if (art.ambientColor) {
+        a.setAttribute('data-ambient-color', art.ambientColor);
+      }
+      if (art.link && art.link !== '#') {
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+      }
+
+      const catKey = `cat_${(art.category || 'watercolor').toLowerCase()}`;
+      const imgSrc = art.image || art.fallbackImage || 'assets/images/logo.jpg';
+      const fallbackAttr = art.fallbackImage ? `onerror="this.onerror=null;this.src='${art.fallbackImage}'"` : '';
+
+      a.innerHTML = `
+        <img src="${imgSrc}" ${fallbackAttr} alt="${escapeHtml(art.title)}" class="gallery-item-img" ${idx === 0 ? 'loading="eager"' : 'loading="lazy"'}>
+        <div class="gallery-item-info">
+          <span class="gallery-item-category-tag" data-i18n="${catKey}">${escapeHtml(art.category || 'Artwork')}</span>
+          <h3 class="gallery-item-title">${escapeHtml(art.title)}</h3>
+          <span class="gallery-item-artist">${escapeHtml(art.artist || 'Habiba maarek')}</span>
+          <span class="gallery-item-price">${escapeHtml(art.price || '')}</span>
+        </div>
+      `;
+      galleryGrid.appendChild(a);
+    });
+
+    // Translate dynamic category tags if i18n engine is active
+    if (window.setLanguage && window.currentLang) {
+      window.setLanguage(window.currentLang);
+    }
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 
   function initOriginalGallery() {
     const galleryGrid = document.getElementById('galleryGrid');
@@ -20,29 +94,22 @@
 
     if (!galleryGrid || !galleryItems.length) return;
 
-    // 1. Signature Ambient Colors Per Artwork (Exact original palette)
-    const colors = [
-      "#3b2b1f", // 1. Quiet Companionship (Brown)
-      "#4a2912", // 2. Whispers of Copper (Copper/Orange)
-      "#112738", // 3. Coastal dreams (Deep Blue)
-      "#3d2447", // 4. Faces of the mind (Purple)
-      "#4a1919", // 5. Forgotten Performers (Dark Red)
-      "#3b2718", // 6. Resting vessels (Clay)
-      "#0f1a38", // 7. Midnight Gondola (Night Blue)
-      "#183329", // 8. Mirror of mountains (Forest Green)
-      "#113622", // 9. Nostalgia in green (Deep Green)
-      "#423311", // 10. Angles of the soul (Gold)
-      "#3d1330", // 11. Kaleidoscope City (Magenta)
-      "#211d42"  // 12. The Quiet Hour (Twilight)
+    // 1. Signature Ambient Colors Per Artwork
+    const defaultColors = [
+      "#3b2b1f", "#4a2912", "#112738", "#3d2447",
+      "#4a1919", "#3b2718", "#0f1a38", "#183329",
+      "#113622", "#423311", "#3d1330", "#211d42"
     ];
 
-    // 2. Exact Original Ambient Lighting via IntersectionObserver ("كل لوحه بي اضائه وراها")
+    // 2. Ambient Lighting via IntersectionObserver
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
           const index = galleryItems.indexOf(entry.target);
-          if (colors[index] && ambientLayer) {
-            ambientLayer.style.backgroundColor = colors[index];
+          const dynamicColor = entry.target.getAttribute('data-ambient-color');
+          const finalColor = dynamicColor || defaultColors[index % defaultColors.length] || '#3b2b1f';
+          if (ambientLayer) {
+            ambientLayer.style.backgroundColor = finalColor;
           }
         }
       });

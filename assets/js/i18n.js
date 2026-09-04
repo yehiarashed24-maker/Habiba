@@ -205,6 +205,10 @@ function toggleLanguage() {
   setLanguage(nextLang);
 }
 
+// Expose globally for dynamic components
+window.setLanguage = setLanguage;
+window.translations = translations;
+
 document.addEventListener('DOMContentLoaded', () => {
   setLanguage(currentLang);
   const langToggleBtn = document.getElementById('langToggleBtn');
