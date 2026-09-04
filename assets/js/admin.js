@@ -18,9 +18,7 @@
   const STORAGE_KEY_ATTEMPTS = 'hm_auth_failed_attempts';
   const STORAGE_KEY_LOCKOUT = 'hm_auth_lockout_time';
 
-  // Default initial administrative password: Habiba@2026!
-  // Salt: "HabibaMotifSecretAtelier2026"
-  // SHA-256 of "Habiba@2026!HabibaMotifSecretAtelier2026":
+  // Precomputed Salted SHA-256 Vault Hash
   const DEFAULT_SALT = 'HabibaMotifSecretAtelier2026';
   const DEFAULT_HASH_HEX = '72bcf7c4c859a89ea719d27755f4e1974505f8527904a7020e3a619c467bc587';
 
@@ -192,11 +190,7 @@
     const expectedHash = getActiveHash();
     const computedHash = await sha256(password + salt);
 
-    const isMatch = (computedHash === expectedHash) ||
-                    (computedHash === '72bcf7c4c859a89ea719d27755f4e1974505f8527904a7020e3a619c467bc587') ||
-                    (password === 'Habiba@2026!');
-
-    if (isMatch) {
+    if (computedHash === expectedHash) {
       resetFailedAttempts();
       generateSessionToken();
       enterDashboard();
