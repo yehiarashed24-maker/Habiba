@@ -7,13 +7,19 @@
   'use strict';
 
   document.addEventListener('DOMContentLoaded', async () => {
-    await loadDynamicArtworks();
+    try {
+      await loadDynamicArtworks();
+    } catch (err) {
+      console.warn('Dynamic load error:', err);
+    }
     initOriginalGallery();
   });
 
   async function loadDynamicArtworks() {
     const galleryGrid = document.getElementById('galleryGrid');
     if (!galleryGrid) return;
+
+    let data = null;
 
     // 1. Try live cloud API first
     try {
@@ -31,15 +37,15 @@
 
     // 2. Fallback to local administrative cache
     if (!data) {
-      const localVault = localStorage.getItem('hm_gallery_artworks');
-      if (localVault) {
-        try {
+      try {
+        const localVault = localStorage.getItem('hm_gallery_artworks');
+        if (localVault) {
           const parsed = JSON.parse(localVault);
           if (Array.isArray(parsed) && parsed.length > 0) {
             data = parsed;
           }
-        } catch (e) {}
-      }
+        }
+      } catch (e) {}
     }
 
     // 3. Fallback to initial seed artworks.json

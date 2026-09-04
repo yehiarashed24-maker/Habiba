@@ -483,12 +483,14 @@
     const file = e.target.files[0];
     if (!file) return;
 
+    imageUploadPlaceholder.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Processing & compressing image...</span>';
+
     const reader = new FileReader();
     reader.onload = (event) => {
       const img = new Image();
       img.onload = () => {
-        // Optimize resolution: max 1200x1200px
-        const maxDim = 1200;
+        // Optimize resolution: max 1000px for crisp display and fast cloud sync
+        const maxDim = 1000;
         let w = img.width;
         let h = img.height;
 
@@ -508,15 +510,21 @@
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, w, h);
 
-        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
         inputImageUrl.value = compressedDataUrl;
         imagePreviewImg.src = compressedDataUrl;
         imagePreviewImg.style.display = 'block';
         imageUploadPlaceholder.style.display = 'none';
+        imageUploadPlaceholder.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Upload image or enter URL below</span>';
+      };
+      img.onerror = () => {
+        alert('Could not read this image file. Please try another photo.');
+        imageUploadPlaceholder.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Upload image or enter URL below</span>';
       };
       img.src = event.target.result;
     };
     reader.readAsDataURL(file);
+    e.target.value = '';
   });
 
   // Ambient Presets Click
@@ -528,9 +536,7 @@
   });
 
   // Save Artwork (Create or Update)
-  artworkForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-
+  function handleSaveArtwork() {
     const title = inputTitle.value.trim();
     let category = inputCategory.value;
     if (category === 'custom') {
@@ -547,13 +553,19 @@
     const ambientColor = inputAmbientColor.value;
     const editId = artworkEditId.value;
 
-    if (!title || !image) {
-      alert('Please provide both artwork title and an image.');
+    if (!title) {
+      alert('Please enter artwork title.');
+      inputTitle.focus();
+      return;
+    }
+
+    if (!image) {
+      alert('Please upload an artwork image or provide an image web URL.');
       return;
     }
 
     if (editId) {
-      // Update
+      // Update existing artwork
       const index = artworksList.findIndex(a => a.id === editId);
       if (index !== -1) {
         artworksList[index] = {
@@ -568,7 +580,7 @@
         showToast(`Updated "${title}" successfully`);
       }
     } else {
-      // Create
+      // Create new artwork
       const newArtwork = {
         id: `art-${Date.now()}`,
         title,
@@ -588,6 +600,16 @@
     saveArtworksLocally();
     renderArtworksTable();
     closeArtworkModal();
+  }
+
+  artworkForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleSaveArtwork();
+  });
+
+  document.getElementById('btnArtworkSave')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleSaveArtwork();
   });
 
   function deleteArtwork(id) {

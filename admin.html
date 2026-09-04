@@ -211,7 +211,7 @@
         <h2 class="modal-title" id="artworkModalTitle">Add New Artwork</h2>
       </div>
 
-      <form id="artworkForm" class="modal-form" autocomplete="off" onsubmit="return false;">
+      <form id="artworkForm" class="modal-form" autocomplete="off">
         <input type="hidden" id="artworkEditId" value="">
 
         <!-- Title -->
@@ -273,7 +273,7 @@
                 <input type="file" id="inputFileUpload" accept="image/*" style="display: none;">
               </div>
               <div class="url-divider"><span>OR</span></div>
-              <input type="url" id="inputImageUrl" class="form-input" placeholder="Paste image web URL (https://...)">
+              <input type="text" id="inputImageUrl" class="form-input" placeholder="Paste image web URL (https://...)">
             </div>
           </div>
         </div>
@@ -282,7 +282,7 @@
         <div class="form-row">
           <div class="form-group full-width">
             <label for="inputLink">Purchase Link (Optional)</label>
-            <input type="url" id="inputLink" class="form-input" placeholder="https://mytuhfa.com/artwork/... or Instagram/WhatsApp link">
+            <input type="text" id="inputLink" class="form-input" placeholder="https://mytuhfa.com/artwork/... or Instagram/WhatsApp link">
           </div>
         </div>
 
@@ -308,7 +308,7 @@
 
         <div class="modal-actions">
           <button type="button" class="btn-secondary" id="btnArtworkCancel">Cancel</button>
-          <button type="submit" class="btn-primary" id="btnArtworkSave">
+          <button type="button" class="btn-primary" id="btnArtworkSave">
             <i class="fa-solid fa-floppy-disk"></i>
             <span>Save Artwork</span>
           </button>
