@@ -25,65 +25,66 @@
 
   <!-- Interactive Warp WebGL Shader (Admin Only) -->
   <div class="admin-shader-container" id="adminShaderCanvas" aria-hidden="true"></div>
-  <div class="admin-shader-overlay" aria-hidden="true"></div>
 
   <!-- =========================================================================
-       1. SECURE LOGIN VIEW
+       1. SECURE LOGIN VIEW (21ST.DEV HERO DESIGN - OPEN & MINIMALIST)
        ========================================================================= -->
   <section class="admin-auth-screen" id="authScreen" role="region" aria-label="Admin Authentication">
     <div class="auth-hero-container">
       
-      <!-- Brand & Headings matching 21st.dev light typography -->
-      <div class="auth-hero-header">
-        <div class="auth-brand-badge">
-          <img src="assets/images/logo.jpg" alt="Habiba Motif" class="auth-logo-circle">
-          <span class="auth-brand-name">Habiba Motif</span>
+      <!-- Brand Pill Badge -->
+      <div class="auth-brand-badge">
+        <img src="assets/images/logo.jpg" alt="Habiba Motif" class="auth-logo-circle">
+        <span class="auth-brand-name">Habiba Motif</span>
+      </div>
+
+      <!-- Hero Heading -->
+      <h1 class="auth-hero-title">Curator Private Atelier</h1>
+
+      <!-- Subtitle -->
+      <p class="auth-hero-subtitle">
+        Protected administrative portal for gallery curation, artwork cataloging, and exhibition management.
+      </p>
+
+      <!-- Minimalist Floating Form (No Enclosing Box / No AI Card) -->
+      <form id="loginForm" class="auth-hero-form" autocomplete="off">
+        
+        <!-- Floating Frosted Glass Pill Input -->
+        <div class="auth-floating-input-pill">
+          <i class="fa-solid fa-key auth-input-icon"></i>
+          <input type="password" id="adminPassword" class="auth-pill-field" placeholder="Enter administrative key..." required autofocus>
+          <button type="button" class="btn-toggle-capsule-pw" id="btnTogglePw" aria-label="Show password">
+            <i class="fa-regular fa-eye" id="togglePwIcon"></i>
+          </button>
         </div>
-        <h1 class="auth-hero-title">Curator Private Atelier</h1>
-        <p class="auth-hero-subtitle">
-          Protected administrative portal for gallery curation, artwork cataloging, and exhibition management.
-        </p>
-      </div>
 
-      <!-- Elevated Minimalist Glass Auth Capsule -->
-      <div class="auth-glass-capsule">
-        <form id="loginForm" class="auth-capsule-form" autocomplete="off">
-          <div class="auth-input-capsule">
-            <i class="fa-solid fa-key auth-capsule-icon"></i>
-            <input type="password" id="adminPassword" class="auth-capsule-input" placeholder="Enter administrative key..." required autofocus>
-            <button type="button" class="btn-toggle-capsule-pw" id="btnTogglePw" aria-label="Show password">
-              <i class="fa-regular fa-eye" id="togglePwIcon"></i>
-            </button>
-          </div>
+        <!-- Cooldown / Lockout Notice -->
+        <div id="lockoutNotice" class="lockout-notice" style="display: none;">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span id="lockoutText">Security cooldown active. Please wait 5:00</span>
+        </div>
 
-          <!-- Cooldown / Lockout Notice -->
-          <div id="lockoutNotice" class="lockout-notice" style="display: none;">
-            <i class="fa-solid fa-shield-halved"></i>
-            <span id="lockoutText">Security cooldown active. Please wait 5:00</span>
-          </div>
+        <div id="authErrorMsg" class="auth-error-msg" style="display: none;">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="authErrorText">Invalid security key. Please try again.</span>
+        </div>
 
-          <div id="authErrorMsg" class="auth-error-msg" style="display: none;">
-            <i class="fa-solid fa-circle-exclamation"></i>
-            <span id="authErrorText">Invalid security key. Please try again.</span>
-          </div>
+        <!-- Pill Actions Directly from 21st.dev Component -->
+        <div class="auth-pills-row">
+          <button type="submit" id="btnLogin" class="btn-pill-submit">
+            <span>Authenticate Session</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          <a href="gallery.html" class="btn-pill-secondary">
+            <span>View Gallery</span>
+          </a>
+        </div>
 
-          <!-- Pill Actions Matching 21st.dev Component -->
-          <div class="auth-pills-row">
-            <button type="submit" id="btnLogin" class="btn-pill-submit">
-              <span>Authenticate Session</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <a href="gallery.html" class="btn-pill-secondary">
-              <span>View Gallery</span>
-            </a>
-          </div>
-
-          <div class="auth-capsule-footer">
-            <i class="fa-solid fa-shield-halved"></i>
-            <span>End-to-End Encrypted Session • PBKDF2 Protected</span>
-          </div>
-        </form>
-      </div>
+        <div class="auth-capsule-footer">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>End-to-End Encrypted Session • PBKDF2 Protected</span>
+        </div>
+      </form>
 
     </div>
   </section>

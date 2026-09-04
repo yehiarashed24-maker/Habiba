@@ -11,6 +11,7 @@ async function initWarpShader() {
   const container = document.getElementById("adminShaderCanvas");
   if (!container) return;
 
+  // 21st.dev Component exact colors
   const colors = [
     "hsl(200, 100%, 20%)",
     "hsl(160, 100%, 75%)",
@@ -35,14 +36,8 @@ async function initWarpShader() {
       }
     }
 
-    // 2. Pad colors array to match GLSL uniform vec4 u_colors[10] exactly
-    const parsedColors = colors.map(getShaderColorFromString);
-    while (parsedColors.length < 10) {
-      parsedColors.push([0, 0, 0, 1]);
-    }
-
     const uniforms = {
-      u_colors: parsedColors,
+      u_colors: colors.map(getShaderColorFromString),
       u_colorsCount: colors.length,
       u_proportion: 0.45,
       u_softness: 1.0,
@@ -54,17 +49,17 @@ async function initWarpShader() {
       u_noiseTexture: noiseTexture,
       u_scale: 1.0,
       u_rotation: 0,
-      u_fit: ShaderFitOptions.cover,
+      u_fit: ShaderFitOptions.none,
       u_offsetX: 0,
       u_offsetY: 0,
       u_originX: 0.5,
       u_originY: 0.5,
-      u_worldWidth: 1,
-      u_worldHeight: 1
+      u_worldWidth: 0,
+      u_worldHeight: 0
     };
 
-    // 3. Mount WebGL2 Shader
-    new ShaderMount(
+    // 2. Mount WebGL2 Shader
+    window.adminShaderMount = new ShaderMount(
       container,
       warpFragmentShader,
       uniforms,
