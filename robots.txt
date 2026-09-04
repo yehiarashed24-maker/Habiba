@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: /admin.html
-Disallow: /assets/css/admin.css
-Disallow: /assets/js/admin.js
-Allow: /
