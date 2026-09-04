@@ -142,6 +142,36 @@
     <span data-i18n="studio_toast_download">Artwork saved successfully!</span>
   </div>
 
+  <!-- Mobile & Universal Artwork Save Modal -->
+  <div class="studio-save-modal" id="studioSaveModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="save-modal-backdrop" id="saveModalBackdrop"></div>
+    <div class="save-modal-card">
+      <button class="save-modal-close" id="saveModalClose" aria-label="Close" type="button">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="save-modal-header">
+        <i class="fa-solid fa-wand-magic-sparkles modal-sparkle-icon"></i>
+        <h3 class="save-modal-title" data-i18n="studio_save_modal_title">Your Masterpiece</h3>
+      </div>
+      <div class="save-modal-preview">
+        <img id="saveModalImg" alt="Your Artwork Preview" src="">
+      </div>
+      <p class="save-modal-hint" data-i18n="studio_save_modal_hint">
+        Long-press the image to save to your Photos, or tap Share below.
+      </p>
+      <div class="save-modal-actions">
+        <button type="button" class="modal-btn modal-btn-primary" id="saveModalShareBtn">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i>
+          <span data-i18n="studio_save_btn_share">Share / Save to Photos</span>
+        </button>
+        <button type="button" class="modal-btn modal-btn-secondary" id="saveModalDirectBtn">
+          <i class="fa-solid fa-download"></i>
+          <span data-i18n="studio_save_btn_direct">Direct Download</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- 3D Background Engine, Multi-Language & Studio Canvas Engine -->
   <script src="assets/js/three.min.js"></script>
   <script src="assets/js/studio-3d-bg.js"></script>

@@ -45,16 +45,29 @@
     let cssHeight = 0;
 
     function resizeCanvas() {
-      // Calculate responsive dimensions within easel frame
-      const maxW = Math.min(window.innerWidth * 0.90, 1050);
-      const maxH = Math.min(window.innerHeight * 0.70, 680);
+      // Calculate responsive dimensions taking into account header and bottom dock
+      const headerEl = document.getElementById('siteHeader');
+      const dockEl = document.querySelector('.studio-dock');
+      const headerH = headerEl ? headerEl.offsetHeight : (window.innerWidth <= 768 ? 85 : 65);
+      const dockH = dockEl ? dockEl.offsetHeight : 55;
+
+      const vpHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const vpWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+
+      // Safe breathing room between header and bottom dock so canvas never crowds or pushes the dock
+      const verticalPadding = window.innerWidth <= 768 ? 24 : 45;
+      const horizontalPadding = window.innerWidth <= 768 ? 16 : 50;
+
+      const maxAvailableH = Math.max(vpHeight - headerH - dockH - verticalPadding, 170);
+      const maxAvailableW = Math.min(vpWidth - horizontalPadding, 1100);
 
       // Classic golden proportion canvas ratio (~4:3)
-      let w = maxW;
-      let h = w * 0.72;
-      if (h > maxH) {
-        h = maxH;
-        w = h / 0.72;
+      const ratio = window.innerWidth <= 768 ? 0.72 : 0.68;
+      let w = maxAvailableW;
+      let h = w * ratio;
+      if (h > maxAvailableH) {
+        h = maxAvailableH;
+        w = h / ratio;
       }
 
       cssWidth = Math.floor(w);
@@ -108,11 +121,14 @@
     }
 
     resizeCanvas();
-    window.addEventListener('resize', () => {
-      // Debounced resize to preserve artwork
+    const handleViewportResize = () => {
       clearTimeout(window._studioResizeTimer);
-      window._studioResizeTimer = setTimeout(resizeCanvas, 250);
-    });
+      window._studioResizeTimer = setTimeout(resizeCanvas, 150);
+    };
+    window.addEventListener('resize', handleViewportResize, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleViewportResize, { passive: true });
+    }
 
     // History Management
     function saveState() {
@@ -500,7 +516,87 @@
     });
 
     // Save / Download Artwork (Exports High-Res Image with Artist Hallmark)
-    document.getElementById('btnSave')?.addEventListener('click', () => {
+    const btnSave = document.getElementById('btnSave');
+    const saveModal = document.getElementById('studioSaveModal');
+    const saveModalImg = document.getElementById('saveModalImg');
+    const saveModalClose = document.getElementById('saveModalClose');
+    const saveModalBackdrop = document.getElementById('saveModalBackdrop');
+    const saveModalShareBtn = document.getElementById('saveModalShareBtn');
+    const saveModalDirectBtn = document.getElementById('saveModalDirectBtn');
+
+    let currentExportBlob = null;
+    let currentExportFilename = '';
+
+    function closeSaveModal() {
+      if (!saveModal) return;
+      saveModal.classList.remove('active');
+      saveModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function openSaveModal(dataUrl, blob, filename) {
+      if (!saveModal) return;
+      currentExportBlob = blob;
+      currentExportFilename = filename;
+      if (saveModalImg) saveModalImg.src = dataUrl;
+      saveModal.classList.add('active');
+      saveModal.setAttribute('aria-hidden', 'false');
+    }
+
+    saveModalClose?.addEventListener('click', closeSaveModal);
+    saveModalBackdrop?.addEventListener('click', closeSaveModal);
+
+    function triggerDirectDownload(blob, filename) {
+      try {
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = blobUrl;
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(() => {
+          if (link.parentNode) document.body.removeChild(link);
+          URL.revokeObjectURL(blobUrl);
+        }, 1200);
+      } catch (err) {
+        console.warn('Direct download error:', err);
+      }
+    }
+
+    async function handleShareFile(file) {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: 'Habiba Motif Artwork',
+            text: 'Created in Habiba Motif Art Studio'
+          });
+          showToast();
+          return true;
+        } catch (err) {
+          if (err.name === 'AbortError') return true; // User dismissed share sheet
+          console.warn('Web Share failed:', err);
+        }
+      }
+      return false;
+    }
+
+    saveModalShareBtn?.addEventListener('click', async () => {
+      if (!currentExportBlob) return;
+      const file = new File([currentExportBlob], currentExportFilename, { type: 'image/png' });
+      const shared = await handleShareFile(file);
+      if (!shared) {
+        triggerDirectDownload(currentExportBlob, currentExportFilename);
+        showToast();
+      }
+    });
+
+    saveModalDirectBtn?.addEventListener('click', () => {
+      if (!currentExportBlob) return;
+      triggerDirectDownload(currentExportBlob, currentExportFilename);
+      showToast();
+    });
+
+    btnSave?.addEventListener('click', () => {
       // Create off-screen export canvas
       const exportCanvas = document.createElement('canvas');
       exportCanvas.width = canvas.width;
@@ -521,14 +617,44 @@
       expCtx.fillText('Habiba Motif Gallery • 2026', stampX, stampY);
       expCtx.restore();
 
-      // Trigger download
-      const link = document.createElement('a');
-      link.download = `HabibaMotif_Artwork_${Date.now()}.png`;
-      link.href = exportCanvas.toDataURL('image/png');
-      link.click();
+      const filename = `HabibaMotif_Artwork_${Date.now()}.png`;
 
-      // Show toast confirmation
-      showToast();
+      exportCanvas.toBlob(async (blob) => {
+        if (!blob) return;
+        currentExportBlob = blob;
+        currentExportFilename = filename;
+        const dataUrl = exportCanvas.toDataURL('image/png');
+        const file = new File([blob], filename, { type: 'image/png' });
+
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (window.innerWidth <= 800);
+        const isInAppBrowser = /Instagram|FBAN|FBAV|Line|TikTok/i.test(navigator.userAgent);
+
+        // Try Web Share API directly on mobile if supported
+        if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: 'Habiba Motif Artwork',
+              text: 'Created in Habiba Motif Art Studio'
+            });
+            showToast();
+            return;
+          } catch (err) {
+            if (err.name === 'AbortError') return;
+            console.warn('Share sheet dismissed, falling back to modal:', err);
+          }
+        }
+
+        // For mobile or in-app browsers, open the visual Save Modal so user can long-press to save to camera roll
+        if (isMobile || isInAppBrowser) {
+          openSaveModal(dataUrl, blob, filename);
+          showToast();
+        } else {
+          // Desktop: trigger download directly
+          triggerDirectDownload(blob, filename);
+          showToast();
+        }
+      }, 'image/png');
     });
 
     function showToast() {
