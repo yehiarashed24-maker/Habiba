@@ -228,16 +228,20 @@
     parts.forEach((part, lineIdx) => {
       // Remove any tags inside part if present
       const cleanText = part.replace(/<[^>]*>/g, '').trim();
-      let lineChars = '';
-      for (let i = 0; i < cleanText.length; i++) {
-        const char = cleanText[i];
-        if (char === ' ') {
-          lineChars += '<span class="brush-char space">&nbsp;</span>';
-        } else {
-          lineChars += `<span class="brush-char" data-line="${lineIdx}">${char}</span>`;
+      const words = cleanText.split(/\s+/).filter(Boolean);
+      let lineWordsHTML = '';
+      words.forEach((word, wordIdx) => {
+        let wordChars = '';
+        for (let i = 0; i < word.length; i++) {
+          const char = word[i];
+          wordChars += `<span class="brush-char" data-line="${lineIdx}">${char}</span>`;
         }
-      }
-      wrappedHTML += `<span class="brush-line line-${lineIdx + 1}">${lineChars}</span>`;
+        lineWordsHTML += `<span class="brush-word">${wordChars}</span>`;
+        if (wordIdx < words.length - 1) {
+          lineWordsHTML += '<span class="brush-char space">&nbsp;</span>';
+        }
+      });
+      wrappedHTML += `<span class="brush-line line-${lineIdx + 1}">${lineWordsHTML}</span>`;
     });
 
     headline.innerHTML = wrappedHTML;
@@ -295,12 +299,6 @@
       } catch(e) {}
     }
 
-    // Clean up theater stage after curtains clear
-    setTimeout(() => {
-      const stage = document.getElementById('theaterCurtainStage');
-      if (stage) stage.remove();
-    }, 2000);
-
     // Prepare live brush-drawn inscription for headline
     const headlineData = prepareHeadlineBrushDrawing(headline);
 
@@ -308,7 +306,7 @@
       const { chars, brushTip, wrapper } = headlineData;
       const charCount = chars.length;
 
-      // Start brush inscription right as curtain opens (around 550ms)
+      // Start brush inscription smoothly
       setTimeout(() => {
         // Place brush tip at the start of first character
         const firstRect = chars[0].getBoundingClientRect();
@@ -318,7 +316,7 @@
         brushTip.classList.add('active');
 
         // Draw each letter sequentially like a real paintbrush stroke
-        const charInterval = 44; // ms per letter for natural calligraphy speed
+        const charInterval = 38; // ms per letter for natural calligraphy speed
 
         chars.forEach((char, idx) => {
           setTimeout(() => {

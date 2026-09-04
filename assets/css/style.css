@@ -29,11 +29,13 @@
 
 html,
 body {
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
   min-height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  position: relative !important;
   font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -383,6 +385,11 @@ body[dir="rtl"] .header-nav-left {
   display: block;
   position: relative;
   white-space: pre-wrap;
+}
+
+.home-headline .brush-word {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .home-headline .brush-char {
@@ -2342,206 +2349,22 @@ body[dir="rtl"] .gallery-item-category-tag {
 }
 
 /* ==========================================================================
-   GRAND THEATER VELVET CURTAIN OPENING (فتحة مسرح كلاسيكية موثوقة 100%)
+   GALLERY FILTER VISIBILITY RULES (INSTANT MOBILE & DESKTOP FILTERING)
    ========================================================================== */
 
-.theater-curtain-stage {
-  position: fixed;
-  inset: 0;
-  z-index: 999999;
-  pointer-events: none;
-  overflow: hidden;
-  background: transparent;
-  animation: fadeOutCurtainStage 0.4s ease 1.7s forwards;
-}
-
-@keyframes fadeOutCurtainStage {
-  0% {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  99% {
-    opacity: 0;
-    visibility: visible;
-  }
-
-  100% {
-    opacity: 0;
-    visibility: hidden;
-    display: none !important;
-  }
-}
-
-.theater-curtain-panel {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 51vw;
-  background:
-    repeating-linear-gradient(90deg,
-      rgba(14, 9, 6, 0.98) 0px,
-      rgba(36, 24, 17, 0.98) 22px,
-      rgba(18, 12, 8, 0.98) 44px,
-      rgba(46, 32, 23, 0.98) 66px,
-      rgba(14, 9, 6, 0.98) 88px),
-    linear-gradient(180deg, #120b07 0%, #1a110a 50%, #0a0604 100%);
-  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.95);
-  will-change: transform;
-}
-
-.curtain-panel-left {
-  left: 0;
-  border-right: 2px solid rgba(220, 190, 110, 0.65);
-  box-shadow: 25px 0 80px rgba(0, 0, 0, 0.95);
-  transform-origin: left top;
-  animation: theaterOpenLeft 1.35s cubic-bezier(0.77, 0, 0.175, 1) 0.25s forwards;
-}
-
-.curtain-panel-right {
-  right: 0;
-  border-left: 2px solid rgba(220, 190, 110, 0.65);
-  box-shadow: -25px 0 80px rgba(0, 0, 0, 0.95);
-  transform-origin: right top;
-  animation: theaterOpenRight 1.35s cubic-bezier(0.77, 0, 0.175, 1) 0.25s forwards;
-}
-
-@keyframes theaterOpenLeft {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-105%);
-  }
-}
-
-@keyframes theaterOpenRight {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(105%);
-  }
-}
-
-/* Center Golden Theater Cord */
-.curtain-center-cord {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2px;
-  background: linear-gradient(180deg, #fae29c, #c8a951, #7a5a1e, #fae29c);
-  box-shadow: 0 0 16px rgba(250, 226, 156, 0.9);
-  z-index: 2;
-  animation: cordFadeOut 0.35s ease 0.2s forwards;
-}
-
-@keyframes cordFadeOut {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-.curtain-velvet-pleats {
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(ellipse at center bottom, rgba(0, 0, 0, 0.65) 0%, transparent 80%);
-  pointer-events: none;
-}
-
-/* Centered Theater Stage Loading Logo */
-.theater-stage-logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.85rem;
-  pointer-events: none;
-  animation: stageLogoDissolve 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
-  will-change: transform, opacity, filter;
-}
-
-.theater-logo-frame {
-  position: relative;
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  padding: 3px;
-  background: linear-gradient(135deg, #fae29c, #c8a951, #7a5a1e, #fae29c);
-  box-shadow:
-    0 0 45px rgba(200, 169, 81, 0.55),
-    0 12px 35px rgba(0, 0, 0, 0.9);
-}
-
-.theater-logo-circle {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-}
-
-.theater-logo-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(250, 226, 156, 0.35) 0%, rgba(200, 169, 81, 0.1) 50%, transparent 70%);
-  filter: blur(12px);
-  pointer-events: none;
-  animation: pulseGlow 1.8s infinite ease-in-out;
-}
-
-@keyframes pulseGlow {
-
-  0%,
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.7;
-  }
-
-  50% {
-    transform: translate(-50%, -50%) scale(1.15);
-    opacity: 1;
-  }
-}
-
-.theater-logo-caption {
-  font-family: 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 0.82rem;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: #fae29c;
-  text-shadow: 0 0 16px rgba(250, 226, 156, 0.8);
-}
-
-@keyframes stageLogoDissolve {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-    filter: blur(0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.12);
-    filter: blur(8px);
-  }
+.gallery-item.filtered-out,
+.gallery-item.is-filtered-out,
+.gallery-page .gallery-item.filtered-out,
+.gallery-page .gallery-item.is-filtered-out {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
 }
 
 
@@ -2717,7 +2540,7 @@ body[dir="rtl"] .gallery-item-category-tag {
   }
 
   /* 5. Artwork Cards on Mobile: Vertical Unified Card */
-  .gallery-page .gallery-item {
+  .gallery-page .gallery-item:not(.filtered-out):not(.is-filtered-out) {
     scroll-snap-align: center !important;
     scroll-snap-stop: normal !important;
     flex: 0 0 82vw !important;
@@ -2730,6 +2553,20 @@ body[dir="rtl"] .gallery-item-category-tag {
     align-items: center !important;
     justify-content: center !important;
     position: relative !important;
+  }
+
+  .gallery-page .gallery-item.filtered-out,
+  .gallery-page .gallery-item.is-filtered-out {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    flex: 0 0 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
   }
 
   .gallery-page .gallery-item-img {
@@ -2803,24 +2640,28 @@ body[dir="rtl"] .gallery-item-category-tag {
     opacity: 0.03 !important;
   }
 
-  /* Home Page Adjustments */
-  .theater-stage-logo {
-    gap: 0.65rem;
+  /* Home Page Adjustments: Mobile Headline Typography & Alignment */
+  .home-headline {
+    font-size: clamp(1.85rem, 6.2vw, 2.5rem) !important;
+    line-height: 1.22 !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    text-wrap: balance !important;
+    max-width: 92vw !important;
   }
 
-  .theater-logo-frame {
-    width: 76px;
-    height: 76px;
+  .home-headline .brush-line {
+    display: block !important;
+    white-space: nowrap !important;
   }
 
-  .theater-logo-caption {
-    font-size: 0.74rem;
-    letter-spacing: 0.18em;
+  .home-headline .brush-word {
+    display: inline-block !important;
+    white-space: nowrap !important;
   }
 
-  .theater-logo-glow {
-    width: 110px;
-    height: 110px;
+  body[dir="rtl"] .home-headline {
+    font-size: clamp(1.75rem, 5.8vw, 2.35rem) !important;
   }
 
   .headline-brushstroke-wrapper {

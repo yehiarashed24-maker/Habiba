@@ -84,9 +84,11 @@
         const itemCat = item.getAttribute('data-category');
         const match = category === 'all' || itemCat === category;
         if (match) {
+          item.classList.remove('filtered-out', 'is-filtered-out');
           item.style.display = 'flex';
           if (!firstMatch) firstMatch = item;
         } else {
+          item.classList.add('filtered-out', 'is-filtered-out');
           item.style.display = 'none';
         }
       });
