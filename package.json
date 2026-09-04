@@ -1,0 +1,12 @@
+{
+  "name": "habiba-motif-gallery",
+  "version": "1.0.0",
+  "description": "Habiba Motif Atelier & Contemporary Art Gallery",
+  "main": "assets/js/main.js",
+  "scripts": {
+    "start": "serve ."
+  },
+  "dependencies": {
+    "mongodb": "^6.21.0"
+  }
+}

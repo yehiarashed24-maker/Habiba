@@ -209,7 +209,22 @@
   // 5. ARTWORKS DATA LAYER
   // ---------------------------------------------------------------------------
   async function loadArtworks() {
-    // 1. Check local administrative vault
+    // 1. Try Live MongoDB API first
+    try {
+      const res = await fetch('/api/artworks');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          artworksList = data;
+          localStorage.setItem(STORAGE_KEY_ARTWORKS, JSON.stringify(artworksList));
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Live API load notice:', e.message);
+    }
+
+    // 2. Check local administrative vault
     const localData = localStorage.getItem(STORAGE_KEY_ARTWORKS);
     if (localData) {
       try {
@@ -221,7 +236,7 @@
       } catch (e) {}
     }
 
-    // 2. Fetch seed file if local vault empty
+    // 3. Fetch seed file if local vault empty
     try {
       const response = await fetch('assets/data/artworks.json');
       if (response.ok) {
@@ -239,7 +254,7 @@
   function saveArtworksLocally() {
     localStorage.setItem(STORAGE_KEY_ARTWORKS, JSON.stringify(artworksList));
     updateStats();
-    autoSyncIfConfigured();
+    syncArtworksToCloud();
   }
 
   // ---------------------------------------------------------------------------
@@ -663,149 +678,50 @@
   });
 
   // ---------------------------------------------------------------------------
-  // 9. PUBLISH & DEPLOY MODAL
+  // 9. AUTOMATED CLOUD SYNC (MongoDB Atlas via /api/artworks) - ZERO CLIENT TOKENS
   // ---------------------------------------------------------------------------
-  const publishModal = document.getElementById('publishModal');
+  let isSyncing = false;
 
-  function openPublishModal() {
-    const savedToken = localStorage.getItem(STORAGE_KEY_GITHUB_TOKEN);
-    const tokenInput = document.getElementById('githubTokenInput');
-    const statusMsg = document.getElementById('githubStatusMsg');
-    if (savedToken && tokenInput) {
-      tokenInput.value = savedToken;
-      if (statusMsg) {
-        statusMsg.style.color = '#34d399';
-        statusMsg.textContent = '✓ Token connected! Auto-sync is active for all additions & deletions.';
-      }
+  async function syncArtworksToCloud() {
+    if (isSyncing) return;
+    isSyncing = true;
+
+    const badge = document.getElementById('cloudSyncStatus');
+    if (badge) {
+      badge.className = 'sync-status-badge syncing';
+      badge.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin"></i> <span class="desktop-text">Saving...</span>';
     }
-    publishModal.classList.add('active');
-    publishModal.setAttribute('aria-hidden', 'false');
-  }
-
-  function closePublishModal() {
-    publishModal.classList.remove('active');
-    publishModal.setAttribute('aria-hidden', 'true');
-  }
-
-  // Download artworks.json file
-  document.getElementById('btnDownloadJson')?.addEventListener('click', () => {
-    const jsonStr = JSON.stringify(artworksList, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'artworks.json';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    showToast('artworks.json downloaded!');
-  });
-
-  // Copy JSON to clipboard
-  document.getElementById('btnCopyJson')?.addEventListener('click', async () => {
-    const jsonStr = JSON.stringify(artworksList, null, 2);
-    try {
-      await navigator.clipboard.writeText(jsonStr);
-      showToast('JSON data copied to clipboard!');
-    } catch (e) {
-      alert('Could not copy automatically. Please download file instead.');
-    }
-  });
-
-  const STORAGE_KEY_GITHUB_TOKEN = 'hm_github_token';
-
-  async function pushToGithubWithToken(token) {
-    const repoOwner = 'yehiarashed24-maker';
-    const repoName = 'Habiba';
-    const filePath = 'assets/data/artworks.json';
-    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
-
-    // 1. Get current file sha
-    let currentSha = '';
-    const getRes = await fetch(apiUrl, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    });
-
-    if (getRes.ok) {
-      const fileInfo = await getRes.json();
-      currentSha = fileInfo.sha;
-    }
-
-    // 2. Put updated content
-    const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(artworksList, null, 2))));
-    const commitRes = await fetch(apiUrl, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        message: `Curator Atelier: Auto-sync gallery artworks (${Date.now()})`,
-        content: contentBase64,
-        sha: currentSha || undefined
-      })
-    });
-
-    return commitRes;
-  }
-
-  async function autoSyncIfConfigured() {
-    const savedToken = localStorage.getItem(STORAGE_KEY_GITHUB_TOKEN);
-    if (!savedToken) return;
 
     try {
-      showToast('Syncing changes to live website...');
-      const res = await pushToGithubWithToken(savedToken);
+      const res = await fetch('/api/artworks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ artworks: artworksList })
+      });
+
       if (res.ok) {
-        showToast('✓ Synced to live website automatically!');
+        if (badge) {
+          badge.className = 'sync-status-badge synced';
+          badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span class="desktop-text">Live Synced</span>';
+        }
       } else {
-        console.warn('Auto-sync notice: token might need renewal');
+        if (badge) {
+          badge.className = 'sync-status-badge fallback';
+          badge.innerHTML = '<i class="fa-solid fa-cloud"></i> <span class="desktop-text">Saved locally</span>';
+        }
       }
     } catch (err) {
-      console.warn('Auto-sync network notice:', err);
+      console.warn('Cloud sync note:', err.message);
+      if (badge) {
+        badge.className = 'sync-status-badge fallback';
+        badge.innerHTML = '<i class="fa-solid fa-cloud"></i> <span class="desktop-text">Saved locally</span>';
+      }
+    } finally {
+      isSyncing = false;
     }
   }
-
-  // GitHub Direct Commit API (Serverless git push via user PAT)
-  document.getElementById('btnGithubCommit')?.addEventListener('click', async () => {
-    const tokenInput = document.getElementById('githubTokenInput');
-    const statusMsg = document.getElementById('githubStatusMsg');
-    const token = tokenInput.value.trim();
-
-    if (!token) {
-      statusMsg.style.color = '#f87171';
-      statusMsg.textContent = 'Please enter a GitHub token with "repo" scope.';
-      return;
-    }
-
-    // Save token locally so future additions and deletions sync automatically!
-    localStorage.setItem(STORAGE_KEY_GITHUB_TOKEN, token);
-
-    statusMsg.style.color = '#60a5fa';
-    statusMsg.textContent = 'Connecting to GitHub repository and pushing commit...';
-
-    try {
-      const commitRes = await pushToGithubWithToken(token);
-
-      if (commitRes.ok) {
-        statusMsg.style.color = '#34d399';
-        statusMsg.textContent = '✓ Success! Token saved. All future additions & deletions will now sync automatically!';
-        showToast('✓ Connected & Synced to GitHub!');
-      } else {
-        const errData = await commitRes.json();
-        statusMsg.style.color = '#f87171';
-        statusMsg.textContent = `GitHub error: ${errData.message || 'Check your token permissions'}`;
-      }
-    } catch (err) {
-      statusMsg.style.color = '#f87171';
-      statusMsg.textContent = `Network error: ${err.message}`;
-    }
-  });
 
   // ---------------------------------------------------------------------------
   // 10. TOAST NOTIFICATION
@@ -861,7 +777,6 @@
 
     // Toolbar Actions
     document.getElementById('btnAddNewArtwork')?.addEventListener('click', openAddArtworkModal);
-    document.getElementById('btnPublishChanges')?.addEventListener('click', openPublishModal);
 
     // Search & Category Filters
     document.getElementById('searchInput')?.addEventListener('input', renderArtworksTable);
@@ -876,15 +791,11 @@
     document.getElementById('securityModalBackdrop')?.addEventListener('click', closeSecurityModal);
     document.getElementById('btnSecurityCancel')?.addEventListener('click', closeSecurityModal);
 
-    document.getElementById('btnPublishModalClose')?.addEventListener('click', closePublishModal);
-    document.getElementById('publishModalBackdrop')?.addEventListener('click', closePublishModal);
-
     // Escape Key to close modals
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeArtworkModal();
         closeSecurityModal();
-        closePublishModal();
       }
     });
   }

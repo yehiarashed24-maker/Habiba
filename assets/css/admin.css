@@ -308,6 +308,36 @@ body.admin-body {
   gap: 0.65rem;
 }
 
+.sync-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: all 0.3s ease;
+}
+
+.sync-status-badge.synced {
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: #34d399;
+}
+
+.sync-status-badge.syncing {
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  color: #60a5fa;
+}
+
+.sync-status-badge.fallback {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
 .btn-nav-action {
   padding: 0.48rem 0.85rem;
   font-size: 0.85rem;

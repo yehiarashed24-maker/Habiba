@@ -90,6 +90,10 @@
       </div>
 
       <div class="admin-header-right">
+        <div id="cloudSyncStatus" class="sync-status-badge synced" title="All changes save automatically to the live gallery">
+          <i class="fa-solid fa-circle-check"></i>
+          <span class="desktop-text">Live Synced</span>
+        </div>
         <a href="gallery.html" target="_blank" class="btn-secondary btn-nav-action" title="View Public Gallery">
           <i class="fa-solid fa-arrow-up-right-from-square"></i>
           <span class="desktop-text">View Gallery</span>
@@ -155,10 +159,6 @@
             <button type="button" class="btn-primary" id="btnAddNewArtwork">
               <i class="fa-solid fa-plus"></i>
               <span>Add New Artwork</span>
-            </button>
-            <button type="button" class="btn-gold" id="btnPublishChanges" title="Save and Deploy Gallery Data">
-              <i class="fa-solid fa-cloud-arrow-up"></i>
-              <span>Save & Publish</span>
             </button>
           </div>
         </section>
@@ -352,68 +352,6 @@
           <button type="submit" class="btn-primary" id="btnSecuritySave">Update Security Key</button>
         </div>
       </form>
-    </div>
-  </div>
-
-  <!-- =========================================================================
-       5. PUBLISH & DEPLOY MODAL
-       ========================================================================= -->
-  <div class="admin-modal" id="publishModal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-backdrop" id="publishModalBackdrop"></div>
-    <div class="modal-card">
-      <button type="button" class="modal-close" id="btnPublishModalClose">&times;</button>
-      <div class="modal-header">
-        <i class="fa-solid fa-cloud-arrow-up modal-header-icon" style="color: #d8b26e;"></i>
-        <h2 class="modal-title">Publish & Synchronize Gallery</h2>
-      </div>
-
-      <div class="publish-content">
-        <p class="publish-desc">
-          Your changes are securely saved in the local vault and will immediately display in your browser. 
-          To deploy changes to the live production website on Vercel:
-        </p>
-
-        <div class="publish-options-grid">
-          <!-- Option 1: Direct File Download -->
-          <div class="publish-option-card">
-            <div class="opt-icon"><i class="fa-solid fa-file-arrow-down"></i></div>
-            <h4>Download Updated artworks.json</h4>
-            <p>Download the latest dataset file and place it in <code>assets/data/artworks.json</code>.</p>
-            <button type="button" class="btn-secondary" id="btnDownloadJson">
-              <i class="fa-solid fa-download"></i>
-              <span>Download artworks.json</span>
-            </button>
-          </div>
-
-          <!-- Option 2: Copy JSON Data -->
-          <div class="publish-option-card">
-            <div class="opt-icon"><i class="fa-solid fa-copy"></i></div>
-            <h4>Copy JSON Payload</h4>
-            <p>Copy the clean JSON configuration directly to your clipboard.</p>
-            <button type="button" class="btn-secondary" id="btnCopyJson">
-              <i class="fa-regular fa-clone"></i>
-              <span>Copy Data to Clipboard</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Optional GitHub Direct Sync -->
-        <div class="github-sync-panel">
-          <div class="sync-header">
-            <i class="fa-brands fa-github"></i>
-            <span>Instant GitHub Direct Commit (Optional)</span>
-          </div>
-          <p class="sync-sub">Commit directly to your GitHub repository (<code>yehiarashed24-maker/Habiba</code>) to automatically trigger a Vercel production rebuild without touching terminal.</p>
-          <div class="sync-input-row">
-            <input type="password" id="githubTokenInput" class="form-input" placeholder="Enter GitHub Personal Access Token (PAT)...">
-            <button type="button" class="btn-primary" id="btnGithubCommit">
-              <i class="fa-solid fa-code-commit"></i>
-              <span>Push to GitHub</span>
-            </button>
-          </div>
-          <span id="githubStatusMsg" class="sync-status-msg"></span>
-        </div>
-      </div>
     </div>
   </div>
 

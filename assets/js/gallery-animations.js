@@ -15,17 +15,34 @@
     const galleryGrid = document.getElementById('galleryGrid');
     if (!galleryGrid) return;
 
-    let data = null;
-    const localVault = localStorage.getItem('hm_gallery_artworks');
-    if (localVault) {
-      try {
-        const parsed = JSON.parse(localVault);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          data = parsed;
+    // 1. Try live cloud API first
+    try {
+      const apiRes = await fetch('/api/artworks').catch(() => null);
+      if (apiRes && apiRes.ok) {
+        const liveData = await apiRes.json().catch(() => null);
+        if (Array.isArray(liveData) && liveData.length > 0) {
+          data = liveData;
+          try {
+            localStorage.setItem('hm_gallery_artworks', JSON.stringify(liveData));
+          } catch (e) {}
         }
-      } catch (e) {}
+      }
+    } catch (e) {}
+
+    // 2. Fallback to local administrative cache
+    if (!data) {
+      const localVault = localStorage.getItem('hm_gallery_artworks');
+      if (localVault) {
+        try {
+          const parsed = JSON.parse(localVault);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            data = parsed;
+          }
+        } catch (e) {}
+      }
     }
 
+    // 3. Fallback to initial seed artworks.json
     if (!data) {
       try {
         const res = await fetch('assets/data/artworks.json');
