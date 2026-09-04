@@ -23,8 +23,9 @@
 
 <body class="admin-body">
 
-  <!-- Atmospheric Glow Background -->
-  <div class="admin-ambient-glow" aria-hidden="true"></div>
+  <!-- Interactive Warp WebGL Shader (Admin Only) -->
+  <div class="admin-shader-container" id="adminShaderCanvas" aria-hidden="true"></div>
+  <div class="admin-shader-overlay" aria-hidden="true"></div>
 
   <!-- =========================================================================
        1. SECURE LOGIN VIEW
@@ -34,8 +35,8 @@
       <div class="auth-header">
         <img src="assets/images/logo.jpg" alt="Habiba Motif" class="auth-logo">
         <span class="auth-signature">Habiba Motif</span>
-        <h1 class="auth-title">Curator's Private Atelier</h1>
-        <p class="auth-subtitle">Restricted Administrative Access • Gallery Control</p>
+        <h1 class="auth-title">Curator Private Atelier</h1>
+        <p class="auth-subtitle">Gallery Master Control • Restricted Access</p>
       </div>
 
       <form id="loginForm" class="auth-form" autocomplete="off" onsubmit="return false;">
@@ -362,6 +363,7 @@
   </div>
 
   <!-- Core Scripts -->
+  <script src="assets/js/admin-shader.js"></script>
   <script src="assets/js/admin.js"></script>
 </body>
 

@@ -51,7 +51,37 @@ body.admin-body {
 }
 
 /* ==========================================================================
-   1. AUTHENTICATION / LOGIN VIEW
+   INTERACTIVE WARP WEBGL SHADER BACKGROUND (ADMIN ONLY)
+   ========================================================================== */
+.admin-shader-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #06090d;
+}
+
+.admin-shader-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.admin-shader-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 35%, rgba(6, 10, 14, 0.35) 0%, rgba(4, 7, 10, 0.82) 100%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   1. BESPOKE ATELIER AUTHENTICATION / LOGIN VIEW
    ========================================================================== */
 .admin-auth-screen {
   position: fixed;
@@ -59,82 +89,114 @@ body.admin-body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 10;
   padding: 1.5rem;
-  background: radial-gradient(circle at center, #131119 0%, #08070a 100%);
+  background: transparent;
 }
 
 .auth-card {
   position: relative;
   width: 100%;
-  max-width: 440px;
-  background: var(--admin-card-bg);
-  border: 1px solid var(--admin-border);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-radius: 20px;
-  padding: 2.5rem 2rem;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+  max-width: 420px;
+  background: rgba(14, 19, 26, 0.64);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-radius: 28px;
+  padding: 3rem 2.4rem 2.2rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 30px 80px -15px rgba(0, 0, 0, 0.85),
+    0 0 60px -20px rgba(52, 211, 153, 0.18);
   text-align: center;
-  animation: authFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  animation: authCardReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes authFadeIn {
-  from { opacity: 0; transform: translateY(16px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes authCardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  pointer-events: none;
 }
 
 .auth-header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.2rem;
 }
 
 .auth-logo {
-  width: 58px;
-  height: 58px;
+  width: 66px;
+  height: 66px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(216, 178, 110, 0.4);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-  margin-bottom: 0.6rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(52, 211, 153, 0.2);
+  margin-bottom: 0.9rem;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-logo:hover {
+  transform: scale(1.06);
 }
 
 .auth-signature {
   display: block;
   font-family: var(--font-signature);
-  font-size: 2.2rem;
+  font-size: 2.7rem;
   color: #ffffff;
   line-height: 1;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
 }
 
 .auth-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--admin-text-main);
-  margin-bottom: 0.3rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 0.35rem;
 }
 
 .auth-subtitle {
-  font-size: 0.82rem;
-  color: var(--admin-text-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.25rem;
   text-align: left;
 }
 
 .input-group label {
   display: block;
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--admin-text-muted);
-  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.55rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .password-input-wrapper {
@@ -145,40 +207,42 @@ body.admin-body {
 
 .password-input-wrapper .input-icon {
   position: absolute;
-  left: 14px;
-  color: var(--admin-text-muted);
-  font-size: 0.95rem;
+  left: 16px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.9rem;
   pointer-events: none;
 }
 
 .auth-input {
   width: 100%;
-  padding: 0.85rem 2.8rem 0.85rem 2.6rem;
-  background: rgba(10, 9, 13, 0.7);
-  border: 1px solid var(--admin-border);
-  border-radius: 10px;
+  padding: 0.95rem 3rem 0.95rem 2.8rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
   color: #ffffff;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-family: inherit;
-  transition: all 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .auth-input:focus {
   outline: none;
-  border-color: var(--admin-border-focus);
-  box-shadow: 0 0 0 3px rgba(216, 178, 110, 0.15);
-  background: rgba(15, 13, 20, 0.9);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.06),
+    0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .btn-toggle-pw {
   position: absolute;
-  right: 12px;
+  right: 14px;
   background: transparent;
   border: none;
-  color: var(--admin-text-muted);
+  color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   padding: 6px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: color 0.2s ease;
 }
 
@@ -192,7 +256,7 @@ body.admin-body {
   color: #fca5a5;
   font-size: 0.82rem;
   padding: 0.65rem 0.85rem;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -204,7 +268,7 @@ body.admin-body {
   color: #f87171;
   font-size: 0.82rem;
   padding: 0.6rem 0.8rem;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -212,30 +276,51 @@ body.admin-body {
 
 .btn-auth-submit {
   width: 100%;
-  padding: 0.9rem;
-  border-radius: 10px;
-  font-size: 0.95rem;
+  padding: 0.95rem 1.4rem;
+  background: #ffffff;
+  color: #0b0f14;
+  border: none;
+  border-radius: 14px;
+  font-size: 0.9rem;
   font-weight: 600;
-  display: flex;
+  letter-spacing: 0.03em;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
   cursor: pointer;
+  box-shadow:
+    0 12px 28px rgba(255, 255, 255, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 0.4rem;
+}
+
+.btn-auth-submit:hover {
+  transform: translateY(-2px);
+  background: #f8fafc;
+  box-shadow:
+    0 16px 36px rgba(255, 255, 255, 0.3),
+    0 6px 16px rgba(0, 0, 0, 0.6);
+}
+
+.btn-auth-submit:active {
+  transform: translateY(0);
 }
 
 .auth-footer-note {
-  margin-top: 0.5rem;
-  font-size: 0.72rem;
-  color: var(--admin-text-muted);
+  margin-top: 1.2rem;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  opacity: 0.8;
+  letter-spacing: 0.06em;
 }
 
 .auth-footer-note i {
-  color: var(--admin-gold);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 /* ==========================================================================
@@ -243,10 +328,13 @@ body.admin-body {
    ========================================================================== */
 .admin-dashboard {
   position: relative;
-  z-index: 1;
+  z-index: 10;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: rgba(6, 9, 13, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .admin-header {
