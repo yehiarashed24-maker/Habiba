@@ -66,6 +66,13 @@
 
     // Feature 4: Artist's Brushstroke Scroll Indicator
     initBrushstrokeScrollIndicator();
+
+    // Re-run headline brush inscription when switching language
+    window.addEventListener('languageChanged', () => {
+      if (!prefersReducedMotion) {
+        runHeroCinematicEntrance(animate, createTimeline, stagger);
+      }
+    });
   }
 
   // ---------------------------------------------------------------------------
@@ -107,14 +114,14 @@
         this.vy = -(Math.random() * 0.45 + 0.2); // Gently rises upward
         this.twinkleSpeed = Math.random() * 0.02 + 0.008;
         this.twinklePhase = Math.random() * Math.PI * 2;
-        // Warm gold / champagne luxury palettes
-        const goldTones = [
-          '225, 190, 120', // Classic Venetian Gold
-          '245, 220, 160', // Warm Champagne
-          '255, 235, 195', // Luminous Pearl Gold
-          '210, 165, 90'   // Rich Amber Gold
+        // Warm luminous ivory & pearl champagne palettes
+        const pearlTones = [
+          '240, 235, 225', // Warm Luminous Ivory
+          '245, 225, 200', // Subtle Warm Champagne
+          '255, 245, 235', // Luminous Pearl
+          '220, 205, 185'  // Soft Ambient Warmth
         ];
-        this.rgb = goldTones[Math.floor(Math.random() * goldTones.length)];
+        this.rgb = pearlTones[Math.floor(Math.random() * pearlTones.length)];
       }
 
       update() {
@@ -208,20 +215,59 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 2. Cinematic Hero Opening Sequence
+  // 2. Cinematic Hero Opening Sequence with Live Brush Inscription
   // ---------------------------------------------------------------------------
+  function prepareHeadlineBrushDrawing(headline) {
+    if (!headline) return null;
+
+    // Split headline by <br> or newline
+    const originalHTML = headline.innerHTML;
+    const parts = originalHTML.split(/<br\s*\/?>/i);
+
+    let wrappedHTML = '';
+    parts.forEach((part, lineIdx) => {
+      // Remove any tags inside part if present
+      const cleanText = part.replace(/<[^>]*>/g, '').trim();
+      let lineChars = '';
+      for (let i = 0; i < cleanText.length; i++) {
+        const char = cleanText[i];
+        if (char === ' ') {
+          lineChars += '<span class="brush-char space">&nbsp;</span>';
+        } else {
+          lineChars += `<span class="brush-char" data-line="${lineIdx}">${char}</span>`;
+        }
+      }
+      wrappedHTML += `<span class="brush-line line-${lineIdx + 1}">${lineChars}</span>`;
+    });
+
+    headline.innerHTML = wrappedHTML;
+
+    // Create or find brush tip element
+    let brushTip = headline.querySelector('.headline-brush-tip');
+    if (!brushTip) {
+      brushTip = document.createElement('div');
+      brushTip.className = 'headline-brush-tip';
+      headline.appendChild(brushTip);
+    }
+
+    return {
+      chars: Array.from(headline.querySelectorAll('.brush-char:not(.space)')),
+      brushTip: brushTip,
+      wrapper: headline
+    };
+  }
+
   function runHeroCinematicEntrance(animate, createTimeline, stagger) {
     const logo = document.querySelector('.brand-logo-circle');
     const brandSpans = document.querySelectorAll('.brand-title span');
     const headline = document.querySelector('.home-headline');
     const cta = document.querySelector('.home-cta');
-    const scrollInd = document.querySelector('.scroll-indicator');
     const brushStrokePath = document.getElementById('brushStrokePath');
     const brushStreakPath = document.getElementById('brushStreakPath');
 
     if (!headline) return;
 
-    // Fixed Logo & Text - NO JUMPING, NO DROPPING DOWN
+    // Fixed Logo & Text - Clean and immediate
     if (logo) {
       logo.style.opacity = '1';
       logo.style.transform = 'none';
@@ -230,8 +276,6 @@
       span.style.opacity = '1';
       span.style.transform = 'none';
     });
-    headline.style.opacity = '1';
-    headline.style.transform = 'none';
 
     // Prepare SVG brushstroke dash offsets
     let len1 = 350;
@@ -251,44 +295,132 @@
       } catch(e) {}
     }
 
-    // Curtains automatically open via hardware GPU keyframes in CSS (zero chance of hanging)
-    // Clean up DOM stage after curtains fully clear
+    // Clean up theater stage after curtains clear
     setTimeout(() => {
       const stage = document.getElementById('theaterCurtainStage');
       if (stage) stage.remove();
     }, 2000);
 
-    // Draw the Golden Brushstroke Underline as the curtains part
-    if (brushStrokePath) {
-      setTimeout(() => {
-        animate(brushStrokePath, {
-          strokeDashoffset: [len1, 0],
-          duration: 1100,
-          ease: 'outQuart'
-        });
-      }, 650);
-    }
-    if (brushStreakPath) {
-      setTimeout(() => {
-        animate(brushStreakPath, {
-          strokeDashoffset: [len2, 0],
-          duration: 950,
-          ease: 'outQuart'
-        });
-      }, 750);
-    }
+    // Prepare live brush-drawn inscription for headline
+    const headlineData = prepareHeadlineBrushDrawing(headline);
 
-    // Gentle CTA pulse entrance
-    if (cta) {
-      cta.style.opacity = '0';
+    if (headlineData && headlineData.chars.length > 0) {
+      const { chars, brushTip, wrapper } = headlineData;
+      const charCount = chars.length;
+
+      // Start brush inscription right as curtain opens (around 550ms)
       setTimeout(() => {
-        animate(cta, {
-          opacity: [0, 1],
-          translateY: [15, 0],
-          duration: 800,
-          ease: 'outQuad'
+        // Place brush tip at the start of first character
+        const firstRect = chars[0].getBoundingClientRect();
+        const wrapRect = wrapper.getBoundingClientRect();
+        brushTip.style.left = (firstRect.left - wrapRect.left) + 'px';
+        brushTip.style.top = (firstRect.top - wrapRect.top + firstRect.height / 2) + 'px';
+        brushTip.classList.add('active');
+
+        // Draw each letter sequentially like a real paintbrush stroke
+        const charInterval = 44; // ms per letter for natural calligraphy speed
+
+        chars.forEach((char, idx) => {
+          setTimeout(() => {
+            const cRect = char.getBoundingClientRect();
+            const wRect = wrapper.getBoundingClientRect();
+            const targetX = cRect.left - wRect.left + cRect.width / 2;
+            const targetY = cRect.top - wRect.top + cRect.height / 2;
+
+            brushTip.style.left = targetX + 'px';
+            brushTip.style.top = targetY + 'px';
+
+            // Paint the letter with fluid ink bloom
+            animate(char, {
+              opacity: [0, 1],
+              filter: ['blur(8px)', 'blur(0px)'],
+              translateY: [6, 0],
+              scale: [0.92, 1],
+              duration: 360,
+              ease: 'outQuart'
+            });
+
+            // Tiny gold ink fleck occasionally
+            if (idx % 3 === 0) {
+              const drop = document.createElement('span');
+              drop.className = 'headline-ink-drop';
+              drop.style.left = targetX + 'px';
+              drop.style.top = (targetY + 8) + 'px';
+              wrapper.appendChild(drop);
+              setTimeout(() => drop.remove(), 700);
+            }
+
+            // When the last letter finishes drawing:
+            if (idx === charCount - 1) {
+              setTimeout(() => {
+                brushTip.classList.remove('active');
+                wrapper.classList.add('anime-painted');
+
+                // Flow seamlessly into the golden underline brushstroke flourish!
+                if (brushStrokePath) {
+                  animate(brushStrokePath, {
+                    strokeDashoffset: [len1, 0],
+                    duration: 1050,
+                    ease: 'outQuart'
+                  });
+                }
+                if (brushStreakPath) {
+                  animate(brushStreakPath, {
+                    strokeDashoffset: [len2, 0],
+                    duration: 900,
+                    ease: 'outQuart'
+                  });
+                }
+
+                // CTA button reveals elegantly
+                if (cta) {
+                  cta.style.opacity = '0';
+                  animate(cta, {
+                    opacity: [0, 1],
+                    translateY: [15, 0],
+                    duration: 750,
+                    ease: 'outQuad'
+                  });
+                }
+              }, 80);
+            }
+          }, idx * charInterval);
         });
-      }, 950);
+      }, 550);
+    } else {
+      // Fallback if headline splitting was not needed
+      headline.style.opacity = '1';
+      headline.style.transform = 'none';
+
+      if (brushStrokePath) {
+        setTimeout(() => {
+          animate(brushStrokePath, {
+            strokeDashoffset: [len1, 0],
+            duration: 1100,
+            ease: 'outQuart'
+          });
+        }, 650);
+      }
+      if (brushStreakPath) {
+        setTimeout(() => {
+          animate(brushStreakPath, {
+            strokeDashoffset: [len2, 0],
+            duration: 950,
+            ease: 'outQuart'
+          });
+        }, 750);
+      }
+      if (cta) {
+        cta.style.opacity = '0';
+        setTimeout(() => {
+          animate(cta, {
+            opacity: [0, 1],
+            translateY: [15, 0],
+            duration: 800,
+            ease: 'outQuad'
+          });
+        }, 950);
+      }
     }
   }
 
@@ -323,7 +455,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 4. "A Frame for Every House" Section Animations & 3D Wall Parallax
+  // 4. "A Frame for Every House" Section Animations & 3D Wall Mounting
   // ---------------------------------------------------------------------------
   function initFrameSectionAnimations(animate, stagger) {
     const section = document.querySelector('.home-frame-section');
@@ -339,72 +471,79 @@
 
     let sectionAnimated = false;
 
-    // Scroll trigger observer
+    // Trigger frame mounting entrance as the visitor scrolls down into the section
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting && !sectionAnimated) {
           sectionAnimated = true;
+          section.classList.add('frame-revealed');
 
-          // 1. Text entrance
+          // 1. Poetic Headline Entrance
           if (title) {
             animate(title, {
               opacity: [0, 1],
-              translateX: [-35, 0],
+              translateX: [-40, 0],
               duration: 1100,
-              ease: 'outExpo'
+              ease: 'outQuart'
             });
           }
 
           if (descParagraphs.length > 0) {
             animate(descParagraphs, {
               opacity: [0, 1],
-              translateY: [25, 0],
+              translateY: [30, 0],
               duration: 1000,
-              delay: stagger(150, { start: 200 }),
-              ease: 'outExpo'
+              delay: stagger(160, { start: 220 }),
+              ease: 'outQuart'
             });
           }
 
-          // 2. Feature 2: 3D Gallery Deck Fan-out Unfold
+          // 2. Main Hero Piece mounts onto the gallery wall with tactile 3D settle
           if (mainPiece) {
             animate(mainPiece, {
               opacity: [0, 1],
-              translateY: [60, 0],
-              rotateY: [-16, 0],
-              scale: [0.88, 1],
-              duration: 1200,
-              ease: 'outQuart'
+              translateY: [85, 0],
+              rotateY: [-24, 0],
+              rotateX: [12, 0],
+              scale: [0.82, 1],
+              duration: 1300,
+              delay: 150,
+              ease: 'outBack(1.4)'
             });
           }
 
+          // 3. Top-Right Frame Mounts
           if (subTop) {
             animate(subTop, {
               opacity: [0, 1],
-              translateX: [45, 0],
-              translateY: [40, 0],
-              rotateY: [18, 0],
-              scale: [0.88, 1],
+              translateX: [65, 0],
+              translateY: [50, 0],
+              rotateY: [20, 0],
+              rotateX: [-8, 0],
+              scale: [0.82, 1],
               duration: 1250,
-              delay: 150,
-              ease: 'outQuart'
+              delay: 350,
+              ease: 'outBack(1.4)'
             });
           }
 
+          // 4. Bottom-Right Frame Mounts
           if (subBot) {
             animate(subBot, {
               opacity: [0, 1],
-              translateX: [45, 0],
-              translateY: [40, 0],
-              rotateY: [-14, 0],
-              scale: [0.88, 1],
+              translateX: [65, 0],
+              translateY: [60, 0],
+              rotateY: [-18, 0],
+              rotateX: [10, 0],
+              scale: [0.82, 1],
               duration: 1250,
-              delay: 280,
-              ease: 'outQuart'
+              delay: 520,
+              ease: 'outBack(1.4)'
             });
           }
         }
       });
-    }, { threshold: 0.05 });
+    }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
 
     sectionObserver.observe(section);
 
@@ -414,6 +553,8 @@
       if (!container) return;
 
       container.addEventListener('mousemove', (e) => {
+        if (!sectionAnimated) return;
+
         const rect = wallComposition.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
@@ -421,11 +562,10 @@
         const deltaX = (e.clientX - centerX) / (rect.width / 2);
         const deltaY = (e.clientY - centerY) / (rect.height / 2);
 
-        // Clamp between -1 and 1
         const normX = Math.max(-1, Math.min(1, deltaX));
         const normY = Math.max(-1, Math.min(1, deltaY));
 
-        // Main frame (moderate depth)
+        // Main frame (depth layer 1)
         if (mainPiece) {
           animate(mainPiece, {
             translateX: normX * 12,
@@ -437,7 +577,7 @@
           });
         }
 
-        // Sub Top frame (floats slightly higher)
+        // Sub Top frame (depth layer 2)
         if (subTop) {
           animate(subTop, {
             translateX: normX * 18,
@@ -449,7 +589,7 @@
           });
         }
 
-        // Sub Bot frame (floats with depth offset)
+        // Sub Bot frame (depth layer 3)
         if (subBot) {
           animate(subBot, {
             translateX: normX * 15,
@@ -463,14 +603,16 @@
       });
 
       container.addEventListener('mouseleave', () => {
+        if (!sectionAnimated) return;
+
         frames.forEach(frame => {
           animate(frame, {
             translateX: 0,
             translateY: 0,
             rotateX: 0,
             rotateY: 0,
-            duration: 900,
-            ease: 'outBack(1.5)'
+            duration: 850,
+            ease: 'outBack(1.4)'
           });
         });
       });
@@ -478,7 +620,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 5. "In the Studio" Video Cards Animations
+  // 5. "In the Studio" Video Cards Entrance, 3D Tilt & Live Hover Preview
   // ---------------------------------------------------------------------------
   function initVideoSectionAnimations(animate, stagger) {
     const videoSection = document.querySelector('.home-video-section');
@@ -488,55 +630,72 @@
     const cards = videoSection.querySelectorAll('.video-card');
     let animated = false;
 
+    // Scroll reveal observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting && !animated) {
           animated = true;
+          videoSection.classList.add('video-revealed');
 
           if (title) {
             animate(title, {
               opacity: [0, 1],
-              translateY: [30, 0],
-              duration: 900,
-              ease: 'outExpo'
+              translateY: [35, 0],
+              duration: 950,
+              ease: 'outQuart'
             });
           }
 
           if (cards.length > 0) {
             animate(cards, {
               opacity: [0, 1],
-              scale: [0.86, 1],
-              translateY: [45, 0],
+              scale: [0.88, 1],
+              translateY: [70, 0],
               duration: 1100,
-              delay: stagger(130, { start: 100 }),
-              ease: 'outBack(1.2)'
+              delay: stagger(150, { start: 120 }),
+              ease: 'outBack(1.35)'
             });
           }
         }
       });
-    }, { threshold: 0.05 });
+    }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
 
     observer.observe(videoSection);
 
-    // Interactive hover physics for each video card
+    // Interactive 3D tilt & live muted preview on mouse hover
     if (!prefersReducedMotion && window.matchMedia('(pointer: fine)').matches) {
       cards.forEach(card => {
+        const video = card.querySelector('video');
+
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = ((y - centerY) / centerY) * -9; // max 9 deg
+          const rotateY = ((x - centerX) / centerX) * 9;
+
+          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px) scale(1.025)`;
+        });
+
         card.addEventListener('mouseenter', () => {
-          animate(card, {
-            scale: 1.035,
-            boxShadow: '0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(225, 190, 120, 0.25)',
-            duration: 450,
-            ease: 'outQuad'
-          });
+          // Play a muted ambient video snippet on hover if not officially clicked to play
+          if (video && video.paused && !card.classList.contains('playing')) {
+            video.muted = true;
+            video.play().catch(() => {});
+          }
         });
 
         card.addEventListener('mouseleave', () => {
-          animate(card, {
-            scale: 1,
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0px rgba(0, 0, 0, 0)',
-            duration: 600,
-            ease: 'outQuad'
-          });
+          card.style.transform = '';
+
+          // If in preview mode (not actively playing), pause and reset to poster frame
+          if (video && !card.classList.contains('playing')) {
+            video.pause();
+            video.currentTime = 0.001;
+          }
         });
       });
     }

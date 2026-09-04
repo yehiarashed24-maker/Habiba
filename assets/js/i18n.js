@@ -6,9 +6,24 @@
 const translations = {
   en: {
     nav_home: "Home",
-    nav_about: "About",
+    nav_studio: "Studio",
     nav_gallery: "Gallery",
+    nav_about: "About",
     nav_contact: "Contact",
+    studio_title: "Habiba Motif Gallery Studio",
+    studio_subtitle: "Your personal tactile canvas to sketch, paint & create",
+    studio_tool_charcoal: "Charcoal",
+    studio_tool_oil: "Oil Impasto",
+    studio_tool_watercolor: "Watercolor",
+    studio_tool_knife: "Palette Knife",
+    studio_tool_eraser: "Eraser",
+    studio_size: "Stroke Size",
+    studio_opacity: "Opacity",
+    studio_undo: "Undo",
+    studio_redo: "Redo",
+    studio_clear: "Clear",
+    studio_download: "Save Painting",
+    studio_toast_download: "Artwork saved successfully!",
     brand_title_1: "HABIBA MOTIF",
     brand_title_2: "ART GALLERY",
     home_headline: "Where passion<br>meets canvas",
@@ -55,9 +70,24 @@ const translations = {
   },
   ar: {
     nav_home: "الرئيسية",
-    nav_about: "من أنا",
+    nav_studio: "المرسم",
     nav_gallery: "المعرض",
+    nav_about: "من أنا",
     nav_contact: "تواصل معنا",
+    studio_title: "استوديو حبيبة موتيف جاليري",
+    studio_subtitle: "كانفاسك الشخصي الحر للتخطيط والرسم والتعبير",
+    studio_tool_charcoal: "فحم ناعم",
+    studio_tool_oil: "زيت كثيف",
+    studio_tool_watercolor: "ألوان مائية",
+    studio_tool_knife: "سكين المعجون",
+    studio_tool_eraser: "ممحاة",
+    studio_size: "سُمك الريشة",
+    studio_opacity: "الشفافية",
+    studio_undo: "تراجع",
+    studio_redo: "إعادة",
+    studio_clear: "مسح",
+    studio_download: "حفظ اللوحة",
+    studio_toast_download: "تم حفظ لوحتك الفنية بنجاح!",
     brand_title_1: "حبيبة موتيف",
     brand_title_2: "معرض فني",
     home_headline: "حيث يلتقي الشغف<br>بروعة الكانفاس",
@@ -155,6 +185,9 @@ function setLanguage(lang) {
       link.setAttribute('href', url.pathname + (url.search ? url.search : ''));
     }
   });
+
+  // Notify other components
+  window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
 }
 
 function toggleLanguage() {

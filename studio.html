@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="studio-page">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Studio Canvas | Habiba Motif Gallery</title>
+  <meta name="description" content="Your personal live creative canvas. Sketch with raw charcoal, paint with rich oil impasto, and create your own artwork in Habiba Motif Gallery.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Base & Studio Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/studio.css">
+</head>
+
+<body class="studio-page">
+
+  <!-- Interactive 3D Canvas Background (Three.js Powered) -->
+  <canvas id="studio3dBg" class="studio-3d-bg" aria-hidden="true"></canvas>
+
+  <!-- Luxury Site Header Navigation -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <nav class="header-nav-left" aria-label="Main Navigation">
+        <a href="index.html" data-i18n="nav_home">Home</a>
+        <a href="studio.html" class="active" data-i18n="nav_studio">Studio</a>
+        <a href="gallery.html" data-i18n="nav_gallery">Gallery</a>
+        <a href="about.html" data-i18n="nav_about">About</a>
+        <a href="contact.html" data-i18n="nav_contact">Contact</a>
+      </nav>
+
+      <div class="header-center">
+        <a href="index.html" class="header-brand" aria-label="Habiba Motif Home">
+          <img src="assets/images/logo.jpg" alt="Habiba Motif Logo" class="header-brand-logo">
+          <span class="brand-signature">Habiba Motif</span>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <button class="lang-toggle-btn" id="langToggleBtn" aria-label="Change Language">
+          <i class="fa-solid fa-globe"></i> عربي
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Canvas Gallery Area -->
+  <main class="studio-main" role="main">
+    <div class="canvas-easel-frame">
+      <div class="canvas-wrapper">
+        <canvas id="paintCanvas"></canvas>
+        <span class="canvas-artist-signature">Habiba Motif Gallery</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Floating Studio Controls Dock -->
+  <footer class="studio-dock" aria-label="Artist Palette & Tools">
+    <!-- Tools Selection -->
+    <div class="dock-group" role="group" aria-label="Brushes">
+      <button class="tool-btn active" data-tool="charcoal" data-tooltip="Charcoal (فحم)" aria-label="Charcoal">
+        <i class="fa-solid fa-pencil"></i>
+      </button>
+      <button class="tool-btn" data-tool="oil" data-tooltip="Oil Paint (زيت)" aria-label="Oil Paint">
+        <i class="fa-solid fa-paintbrush"></i>
+      </button>
+      <button class="tool-btn" data-tool="watercolor" data-tooltip="Watercolor (مائي)" aria-label="Watercolor">
+        <i class="fa-solid fa-droplet"></i>
+      </button>
+      <button class="tool-btn" data-tool="knife" data-tooltip="Palette Knife (سكين)" aria-label="Palette Knife">
+        <i class="fa-solid fa-draw-polygon"></i>
+      </button>
+      <button class="tool-btn" data-tool="eraser" data-tooltip="Eraser (ممحاة)" aria-label="Eraser">
+        <i class="fa-solid fa-eraser"></i>
+      </button>
+    </div>
+
+    <div class="dock-separator"></div>
+
+    <!-- Authentic Studio Color Swatches -->
+    <div class="color-palette" role="group" aria-label="Colors">
+      <button class="color-swatch active" style="background-color: #1c1a20;" data-color="#1c1a20" title="Ivory Black"></button>
+      <button class="color-swatch" style="background-color: #fefefe;" data-color="#fefefe" title="Titanium White"></button>
+      <button class="color-swatch" style="background-color: #1e3f66;" data-color="#1e3f66" title="Cobalt Blue"></button>
+      <button class="color-swatch" style="background-color: #9a4b2c;" data-color="#9a4b2c" title="Burnt Sienna Terracotta"></button>
+      <button class="color-swatch" style="background-color: #851d28;" data-color="#851d28" title="Deep Venetian Crimson"></button>
+      <button class="color-swatch" style="background-color: #3b4d34;" data-color="#3b4d34" title="Olive Green"></button>
+      <button class="color-swatch" style="background-color: #b88a44;" data-color="#b88a44" title="Warm Sand Ochre"></button>
+      <button class="color-swatch" style="background-color: #68646e;" data-color="#68646e" title="Slate Grey"></button>
+      
+      <!-- Custom Color Picker -->
+      <label class="color-picker-wrapper" title="Custom Color">
+        <i class="fa-solid fa-plus"></i>
+        <input type="color" id="customColorPicker" value="#1c1a20">
+      </label>
+    </div>
+
+    <div class="dock-separator"></div>
+
+    <!-- Size & Opacity Controls -->
+    <div class="slider-group" title="Brush Size">
+      <i class="fa-solid fa-circle" style="font-size: 0.6rem;"></i>
+      <input type="range" id="sizeSlider" class="studio-slider" min="2" max="50" value="12">
+      <i class="fa-solid fa-circle" style="font-size: 0.95rem;"></i>
+    </div>
+
+    <div class="dock-separator"></div>
+
+    <!-- Actions (Undo, Redo, Clear, Save) -->
+    <div class="dock-group">
+      <button class="tool-btn" id="btnUndo" data-tooltip="Undo (Ctrl+Z)" aria-label="Undo">
+        <i class="fa-solid fa-rotate-left"></i>
+      </button>
+      <button class="tool-btn" id="btnRedo" data-tooltip="Redo (Ctrl+Y)" aria-label="Redo">
+        <i class="fa-solid fa-rotate-right"></i>
+      </button>
+      <button class="action-btn" id="btnClear" title="Clear Canvas">
+        <i class="fa-solid fa-trash-can"></i>
+        <span data-i18n="studio_clear">Clear</span>
+      </button>
+      <button class="action-btn btn-save" id="btnSave" title="Save Painting">
+        <i class="fa-solid fa-download"></i>
+        <span data-i18n="studio_download">Save Painting</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Save Toast Feedback -->
+  <div class="studio-toast" id="studioToast" role="status" aria-live="polite">
+    <i class="fa-solid fa-circle-check"></i>
+    <span data-i18n="studio_toast_download">Artwork saved successfully!</span>
+  </div>
+
+  <!-- 3D Background Engine, Multi-Language & Studio Canvas Engine -->
+  <script src="assets/js/three.min.js"></script>
+  <script src="assets/js/studio-3d-bg.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/studio-canvas.js"></script>
+</body>
+
+</html>
