@@ -239,6 +239,7 @@
   function saveArtworksLocally() {
     localStorage.setItem(STORAGE_KEY_ARTWORKS, JSON.stringify(artworksList));
     updateStats();
+    autoSyncIfConfigured();
   }
 
   // ---------------------------------------------------------------------------
@@ -667,6 +668,16 @@
   const publishModal = document.getElementById('publishModal');
 
   function openPublishModal() {
+    const savedToken = localStorage.getItem(STORAGE_KEY_GITHUB_TOKEN);
+    const tokenInput = document.getElementById('githubTokenInput');
+    const statusMsg = document.getElementById('githubStatusMsg');
+    if (savedToken && tokenInput) {
+      tokenInput.value = savedToken;
+      if (statusMsg) {
+        statusMsg.style.color = '#34d399';
+        statusMsg.textContent = '✓ Token connected! Auto-sync is active for all additions & deletions.';
+      }
+    }
     publishModal.classList.add('active');
     publishModal.setAttribute('aria-hidden', 'false');
   }
@@ -702,6 +713,64 @@
     }
   });
 
+  const STORAGE_KEY_GITHUB_TOKEN = 'hm_github_token';
+
+  async function pushToGithubWithToken(token) {
+    const repoOwner = 'yehiarashed24-maker';
+    const repoName = 'Habiba';
+    const filePath = 'assets/data/artworks.json';
+    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+
+    // 1. Get current file sha
+    let currentSha = '';
+    const getRes = await fetch(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+
+    if (getRes.ok) {
+      const fileInfo = await getRes.json();
+      currentSha = fileInfo.sha;
+    }
+
+    // 2. Put updated content
+    const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(artworksList, null, 2))));
+    const commitRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: `Curator Atelier: Auto-sync gallery artworks (${Date.now()})`,
+        content: contentBase64,
+        sha: currentSha || undefined
+      })
+    });
+
+    return commitRes;
+  }
+
+  async function autoSyncIfConfigured() {
+    const savedToken = localStorage.getItem(STORAGE_KEY_GITHUB_TOKEN);
+    if (!savedToken) return;
+
+    try {
+      showToast('Syncing changes to live website...');
+      const res = await pushToGithubWithToken(savedToken);
+      if (res.ok) {
+        showToast('✓ Synced to live website automatically!');
+      } else {
+        console.warn('Auto-sync notice: token might need renewal');
+      }
+    } catch (err) {
+      console.warn('Auto-sync network notice:', err);
+    }
+  }
+
   // GitHub Direct Commit API (Serverless git push via user PAT)
   document.getElementById('btnGithubCommit')?.addEventListener('click', async () => {
     const tokenInput = document.getElementById('githubTokenInput');
@@ -714,49 +783,19 @@
       return;
     }
 
+    // Save token locally so future additions and deletions sync automatically!
+    localStorage.setItem(STORAGE_KEY_GITHUB_TOKEN, token);
+
     statusMsg.style.color = '#60a5fa';
     statusMsg.textContent = 'Connecting to GitHub repository and pushing commit...';
 
-    const repoOwner = 'yehiarashed24-maker';
-    const repoName = 'Habiba';
-    const filePath = 'assets/data/artworks.json';
-    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
-
     try {
-      // 1. Get current file sha
-      let currentSha = '';
-      const getRes = await fetch(apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      });
-
-      if (getRes.ok) {
-        const fileInfo = await getRes.json();
-        currentSha = fileInfo.sha;
-      }
-
-      // 2. Put updated content
-      const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(artworksList, null, 2))));
-      const commitRes = await fetch(apiUrl, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: `Curator Atelier: Update gallery artworks (${Date.now()})`,
-          content: contentBase64,
-          sha: currentSha || undefined
-        })
-      });
+      const commitRes = await pushToGithubWithToken(token);
 
       if (commitRes.ok) {
         statusMsg.style.color = '#34d399';
-        statusMsg.textContent = 'Success! Changes committed to GitHub. Vercel is deploying now.';
-        showToast('Committed directly to GitHub!');
+        statusMsg.textContent = '✓ Success! Token saved. All future additions & deletions will now sync automatically!';
+        showToast('✓ Connected & Synced to GitHub!');
       } else {
         const errData = await commitRes.json();
         statusMsg.style.color = '#f87171';
