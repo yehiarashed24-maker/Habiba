@@ -51,37 +51,38 @@ body.admin-body {
 }
 
 /* ==========================================================================
-   INTERACTIVE WARP WEBGL SHADER BACKGROUND (ADMIN ONLY)
+   INTERACTIVE WARP WEBGL SHADER BACKGROUND (FOR SIGN IN & ADMIN PANEL)
    ========================================================================== */
-.admin-shader-container {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  background: #06090d;
+.admin-shader-container,
+[data-paper-shader].admin-shader-container {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  background: #04121b;
 }
 
 .admin-shader-container canvas {
+  position: absolute !important;
+  inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  display: block;
+  display: block !important;
 }
 
 .admin-shader-overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 50% 35%, rgba(6, 10, 14, 0.35) 0%, rgba(4, 7, 10, 0.82) 100%);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: radial-gradient(circle at 50% 40%, rgba(3, 16, 24, 0.25) 0%, rgba(2, 10, 16, 0.78) 100%);
   z-index: 1;
   pointer-events: none;
 }
 
 /* ==========================================================================
-   1. BESPOKE ATELIER AUTHENTICATION / LOGIN VIEW
+   1. 21ST.DEV BESPOKE ELEGANT HERO SIGN-IN VIEW
    ========================================================================== */
 .admin-auth-screen {
   position: fixed;
@@ -90,33 +91,27 @@ body.admin-body {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   background: transparent;
+  overflow-y: auto;
 }
 
-.auth-card {
+.auth-hero-container {
   position: relative;
   width: 100%;
-  max-width: 420px;
-  background: rgba(14, 19, 26, 0.64);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border-radius: 28px;
-  padding: 3rem 2.4rem 2.2rem;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-    0 30px 80px -15px rgba(0, 0, 0, 0.85),
-    0 0 60px -20px rgba(52, 211, 153, 0.18);
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  overflow: hidden;
-  animation: authCardReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  margin: auto;
+  animation: authHeroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes authCardReveal {
+@keyframes authHeroReveal {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.96);
+    transform: translateY(32px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -124,129 +119,137 @@ body.admin-body {
   }
 }
 
-.auth-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 20%;
-  right: 20%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-  pointer-events: none;
+.auth-hero-header {
+  margin-bottom: 2.4rem;
 }
 
-.auth-header {
-  margin-bottom: 2.2rem;
+.auth-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.35rem 0.9rem 0.35rem 0.4rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.auth-logo {
-  width: 66px;
-  height: 66px;
+.auth-logo-circle {
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1.5px solid rgba(255, 255, 255, 0.28);
-  box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.6),
-    0 0 30px rgba(52, 211, 153, 0.2);
-  margin-bottom: 0.9rem;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.auth-logo:hover {
-  transform: scale(1.06);
-}
-
-.auth-signature {
-  display: block;
-  font-family: var(--font-signature);
-  font-size: 2.7rem;
-  color: #ffffff;
-  line-height: 1;
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.02em;
-  text-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
-}
-
-.auth-title {
-  font-size: 0.86rem;
+.auth-brand-name {
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  color: #ffffff;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.auth-hero-title {
+  font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  line-height: 1.1;
+  margin-bottom: 1.1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Plus Jakarta Sans", sans-serif;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.auth-hero-subtitle {
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  font-weight: 300;
+  line-height: 1.6;
   color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 0.35rem;
+  max-width: 540px;
+  margin: 0 auto;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
 }
 
-.auth-subtitle {
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.45);
+/* Minimalist Frosted Glass Capsule */
+.auth-glass-capsule {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: rgba(8, 22, 32, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-radius: 32px;
+  padding: 2.2rem 2.2rem 1.8rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 30px 70px -15px rgba(0, 0, 0, 0.65),
+    0 0 80px -20px rgba(77, 255, 195, 0.2);
 }
 
-.auth-form {
+.auth-capsule-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  text-align: left;
+  gap: 1.15rem;
 }
 
-.input-group label {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.password-input-wrapper {
+.auth-input-capsule {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.password-input-wrapper .input-icon {
+.auth-capsule-icon {
   position: absolute;
-  left: 16px;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.9rem;
+  left: 20px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.95rem;
   pointer-events: none;
 }
 
-.auth-input {
+.auth-capsule-input {
   width: 100%;
-  padding: 0.95rem 3rem 0.95rem 2.8rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
+  padding: 1.05rem 3.2rem 1.05rem 3.2rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
   color: #ffffff;
-  font-size: 0.92rem;
+  font-size: 1rem;
   font-family: inherit;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) inset;
 }
 
-.auth-input:focus {
+.auth-capsule-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.92rem;
+}
+
+.auth-capsule-input:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.45);
   box-shadow:
-    0 0 0 4px rgba(255, 255, 255, 0.06),
-    0 10px 30px rgba(0, 0, 0, 0.4);
+    0 0 0 4px rgba(77, 255, 195, 0.15),
+    0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
-.btn-toggle-pw {
+.btn-toggle-capsule-pw {
   position: absolute;
-  right: 14px;
+  right: 18px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.55);
   cursor: pointer;
   padding: 6px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   transition: color 0.2s ease;
 }
 
-.btn-toggle-pw:hover {
+.btn-toggle-capsule-pw:hover {
   color: #ffffff;
 }
 
@@ -256,75 +259,116 @@ body.admin-body {
   color: #fca5a5;
   font-size: 0.82rem;
   padding: 0.65rem 0.85rem;
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .auth-error-msg {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
   font-size: 0.82rem;
   padding: 0.6rem 0.8rem;
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.btn-auth-submit {
-  width: 100%;
-  padding: 0.95rem 1.4rem;
-  background: #ffffff;
-  color: #0b0f14;
-  border: none;
-  border-radius: 14px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+/* 21st.dev Style Pill Buttons Row */
+.auth-pills-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin-top: 0.4rem;
+}
+
+@media (max-width: 480px) {
+  .auth-pills-row {
+    flex-direction: column;
+  }
+}
+
+.btn-pill-submit {
+  flex: 1.2;
+  padding: 0.95rem 1.6rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
   cursor: pointer;
-  box-shadow:
-    0 12px 28px rgba(255, 255, 255, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.5);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-top: 0.4rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.btn-auth-submit:hover {
-  transform: translateY(-2px);
-  background: #f8fafc;
-  box-shadow:
-    0 16px 36px rgba(255, 255, 255, 0.3),
-    0 6px 16px rgba(0, 0, 0, 0.6);
+.btn-pill-submit:hover {
+  background: rgba(255, 255, 255, 0.32);
+  transform: scale(1.03);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 12px 32px rgba(77, 255, 195, 0.25);
 }
 
-.btn-auth-submit:active {
-  transform: translateY(0);
+.btn-pill-submit:active {
+  transform: scale(0.98);
 }
 
-.auth-footer-note {
-  margin-top: 1.2rem;
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.35);
+.btn-pill-secondary {
+  flex: 0.8;
+  padding: 0.95rem 1.4rem;
+  background: #ffffff;
+  color: #0c1820;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.btn-pill-secondary:hover {
+  transform: scale(1.03);
+  background: #f1f5f9;
+  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.3);
+}
+
+.btn-pill-secondary:active {
+  transform: scale(0.98);
+}
+
+.auth-capsule-footer {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
 }
 
-.auth-footer-note i {
-  color: rgba(255, 255, 255, 0.4);
+.auth-capsule-footer i {
+  color: #4dffc3;
 }
 
 /* ==========================================================================
-   2. DASHBOARD MAIN LAYOUT
+   2. DASHBOARD MAIN LAYOUT (WITH PERSISTENT WARP SHADER BACKGROUND)
    ========================================================================== */
 .admin-dashboard {
   position: relative;
@@ -332,9 +376,9 @@ body.admin-body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: rgba(6, 9, 13, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(3, 12, 19, 0.76);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .admin-header {
